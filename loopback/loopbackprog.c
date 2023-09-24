@@ -8,6 +8,7 @@
 
 #include "loopbackprog.h"
 
+/*
 int receive_clients(int server_fd, struct sockaddr *address, size_t addrlen, int num_clients) {
     char buffer[BUFF_LEN] = {0}; 
     int bytes_read = -1;
@@ -23,7 +24,6 @@ int receive_clients(int server_fd, struct sockaddr *address, size_t addrlen, int
             perror("listen"); 
             goto recv_cleanup;
         } 
-
 	    // Accept the connection
         if ((new_socket = accept(server_fd, address, (socklen_t*) &addrlen)) < 0) { 
             perror("accept"); 
@@ -57,6 +57,7 @@ recv_cleanup:
     }
     return ret;
 }
+*/
 
 int main(int argc, char const *argv[]) 
 { 
@@ -67,13 +68,13 @@ int main(int argc, char const *argv[])
     int ret = EXIT_FAILURE;     
     int num_client_socks = 1;
  
-    // Only argument is number of sockets to use - namely, either 1 or 2.
-	if (SERVER_ARG_NUM != argc) {
+	if (NUM_ARGS != argc) {
 		printf("ERROR: Wrong number of arguments\n");
-		printf(SERVER_USAGE_STR);
+		printf(USAGE_STR);
 		goto cleanup;
 	}
 
+/*
     num_client_socks = atoi(argv[ARG_NUM_SOCKS]);
     if (num_client_socks != 1 && num_client_socks != 2) {
         printf("ERROR: invalid number of client socks. Should be 2 or 1, not %d\n", num_client_socks);
@@ -106,7 +107,7 @@ int main(int argc, char const *argv[])
         perror("receive_clients failed");
         goto cleanup;
     }
-
+*/
     ret = EXIT_SUCCESS;
 
 cleanup:
