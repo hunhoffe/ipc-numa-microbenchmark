@@ -4,8 +4,10 @@
 #define NUM_ARGS 4 
 #define ARG_CLIENT_SERVER 1
 #define ARG_NUM_THREADS 2
-#define ARG_MSG_SIZE 3
-#define USAGE_STR "Usage: <loopbackprog> <client|server> <num_threads> <msg_size>\n"
+#define MAX_NUM_THREADS 16
+#define ARG_MSG_LEN 3
+#define MAX_MSG_LEN 8192
+#define USAGE_STR "Usage: <loopbackprog> <client|server> <num_threads> <msg_len>\n"
 
 
 #define LOOPBACK_IP "127.0.0.1"

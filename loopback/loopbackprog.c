@@ -62,14 +62,19 @@ recv_cleanup:
 
 int main(int argc, char const *argv[]) 
 { 
-    bool is_server = false;
+    // Socket state
     int server_fd;
     struct sockaddr_in address; 
-    int opt = 1; 
     int addrlen = sizeof(address); 
+    
+    // Other state
     int ret = EXIT_FAILURE;     
-    int num_client_socks = 1;
-
+    
+    // Args
+    int num_threads = 1;
+    int msg_len = 1;
+    bool is_server = false;
+ 
     // Check number of arguments 
 	if (NUM_ARGS != argc) {
 		printf("ERROR: Wrong number of arguments\n");
@@ -88,13 +93,21 @@ int main(int argc, char const *argv[])
         goto cleanup;    
     }
 
-/*
-    num_client_socks = atoi(argv[ARG_NUM_SOCKS]);
-    if (num_client_socks != 1 && num_client_socks != 2) {
-        printf("ERROR: invalid number of client socks. Should be 2 or 1, not %d\n", num_client_socks);
+    // Check second argument - number of threads to spawn
+    num_threads = atoi(argv[ARG_NUM_THREADS]);
+    if (num_threads < 1 || num_threads > MAX_NUM_THREADS) {
+        printf("ERROR: invalid number of threads. Should be 0 < num_threads <= %d, not %d\n", MAX_NUM_THREADS, num_threads);
         goto cleanup;
     } 
 
+    // Check third argument - the length of the messages to send
+    msg_len = atoi(argv[ARG_MSG_LEN]);
+    if (msg_len < 1 || msg_len > MAX_MSG_LEN) {
+        printf("ERROR: invalid message length. Should be 0 < msg_len <= %d, not %d\n", MAX_MSG_LEN, msg_len);
+        goto cleanup;
+    } 
+
+    /*
     // Creating socket file descriptor 
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) { 
         perror("socket failed"); 
@@ -121,7 +134,8 @@ int main(int argc, char const *argv[])
         perror("receive_clients failed");
         goto cleanup;
     }
-*/
+    */
+
     ret = EXIT_SUCCESS;
 
 cleanup:
