@@ -5,6 +5,7 @@
 #include <stdlib.h> 
 #include <netinet/in.h> 
 #include <string.h> 
+#include <stdbool.h>
 
 #include "loopbackprog.h"
 
@@ -61,18 +62,31 @@ recv_cleanup:
 
 int main(int argc, char const *argv[]) 
 { 
+    bool is_server = false;
     int server_fd;
     struct sockaddr_in address; 
     int opt = 1; 
     int addrlen = sizeof(address); 
     int ret = EXIT_FAILURE;     
     int num_client_socks = 1;
- 
+
+    // Check number of arguments 
 	if (NUM_ARGS != argc) {
 		printf("ERROR: Wrong number of arguments\n");
 		printf(USAGE_STR);
 		goto cleanup;
 	}
+
+    // Check first argument - for whether client or server
+    if (0 == strncmp("client", argv[ARG_CLIENT_SERVER], 7)) {
+        is_server = false;
+    } else if (0 == strncmp("server", argv[ARG_CLIENT_SERVER], 7)) {
+        is_server = true;
+    } else {
+        printf("ERROR: arg %d should be \"server\" or \"client\"\n", ARG_CLIENT_SERVER - 1);
+        printf(USAGE_STR);
+        goto cleanup;    
+    }
 
 /*
     num_client_socks = atoi(argv[ARG_NUM_SOCKS]);
