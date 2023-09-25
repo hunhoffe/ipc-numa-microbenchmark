@@ -27,6 +27,23 @@ int send_wrapper(int sock_fd, char *buf, int msg_len) {
     return EXIT_SUCCESS;
 }
 
+int recv_wrapper(int sock_fd, char *buf, int msg_len) {
+    int bytes_recv = 0;
+    int recv_ret = 0;
+
+    while (bytes_recv != msg_len) {
+        recv_ret = recv(sock_fd, buf, msg_len - bytes_recv, MSG_WAITALL);
+        if (-1 == recv_ret) {
+            perror("recv");
+            return EXIT_FAILURE;
+        } else {
+            bytes_recv += recv_ret;
+            buf += recv_ret;
+        }
+    }
+    return EXIT_SUCCESS;
+}
+
 int do_work(int sock_fd, int msg_len, bool is_server) {
     char *msg_buf = NULL;
     int ret = EXIT_FAILURE;
@@ -42,7 +59,16 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
         if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
             goto work_cleanup;
         }
+        if (EXIT_SUCCESS != recv_wrapper(sock_fd, msg_buf, msg_len)) {
+            goto work_cleanup;
+        }
     } else {
+        if (EXIT_SUCCESS != recv_wrapper(sock_fd, msg_buf, msg_len)) {
+            goto work_cleanup;
+        }
+        if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
+            goto work_cleanup;
+        }
     }
 
     ret = EXIT_SUCCESS;
