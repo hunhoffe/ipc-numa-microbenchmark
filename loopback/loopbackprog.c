@@ -7,8 +7,17 @@
 #include <sys/socket.h> 
 #include <netinet/in.h> 
 #include <errno.h>
+#include <time.h>
+#include <inttypes.h>
 
 #include "loopbackprog.h"
+
+// https://stackoverflow.com/questions/64893834/measuring-elapsed-time-using-clock-gettimeclock-monotonic
+int64_t difftimespec_ns(const struct timespec after, const struct timespec before)
+{
+    return ((int64_t)after.tv_sec - (int64_t)before.tv_sec) * (int64_t)1000000000
+         + ((int64_t)after.tv_nsec - (int64_t)before.tv_nsec);
+}
 
 int send_wrapper(int sock_fd, char *buf, int msg_len) {
     int bytes_sent = 0;
@@ -48,28 +57,62 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
     char *msg_buf = NULL;
     int ret = EXIT_FAILURE;
     int bytes_sent = 0;
+    struct timespec currentStartTime = { 0 };
+    struct timespec currentTime = { 0 };
+    struct timespec duration = { 0 };
+    long iterations = 0;
+    int64_t timediff = 0;
+    long results[SEC_PER_TEST] = { 0 };
 
     // Initialize message buffer
     if (NULL == (msg_buf = malloc(msg_len))) {
         goto work_cleanup;
     }
 
-    // Send once to kick things off
-    if (is_server) {
-        if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
-            goto work_cleanup;
+    for (int sec = 0; sec < SEC_PER_TEST; sec++) {
+        clock_gettime(CLOCK_MONOTONIC, &currentStartTime);
+
+        while (true) {
+            for (int i = 0; i < OPS_PER_CHECK; i++) {
+                if (is_server) {
+                    // Send then receive
+                    if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
+                        goto work_cleanup;
+                    }
+                    if (EXIT_SUCCESS != recv_wrapper(sock_fd, msg_buf, msg_len)) {
+                        goto work_cleanup;
+                    }
+                } else {
+                    // Receive then send
+                    if (EXIT_SUCCESS != recv_wrapper(sock_fd, msg_buf, msg_len)) {
+                        goto work_cleanup;
+                    }
+                    if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
+                        goto work_cleanup;
+                    }
+                }
+            }
+            iterations += OPS_PER_CHECK;
+
+            clock_gettime(CLOCK_MONOTONIC, &currentTime);
+            timediff = difftimespec_ns(currentTime, currentStartTime);
+            //printf("Difference is: %09" PRIi64 " \n", timediff);
+            if (timediff > ONE_SEC_NS) {
+                break;
+            }
         }
-        if (EXIT_SUCCESS != recv_wrapper(sock_fd, msg_buf, msg_len)) {
-            goto work_cleanup;
-        }
-    } else {
-        if (EXIT_SUCCESS != recv_wrapper(sock_fd, msg_buf, msg_len)) {
-            goto work_cleanup;
-        }
-        if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
-            goto work_cleanup;
-        }
+        results[sec] = iterations;
+        iterations = 0;
     }
+
+    float total = 0;
+    for (int sec = 0; sec < SEC_PER_TEST; sec++) {
+        printf("In second %d, ran %lu iterations.\n", sec, results[sec]);
+        total += (float) results[sec];
+    }
+    printf("Total operations in the test is: %f\n", total);
+    total = total / (float) SEC_PER_TEST;
+    printf("Average operations per second is: %f\n", total);
 
     ret = EXIT_SUCCESS;
 
