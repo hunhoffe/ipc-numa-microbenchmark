@@ -193,6 +193,8 @@ cleanup:
     if (-1 != pipe_fd) {
         close(pipe_fd);
     }
-    unlink(PIPE_PATH);
+    if (is_server) {
+        unlink(PIPE_PATH);
+    }
     return ret; 
 }
