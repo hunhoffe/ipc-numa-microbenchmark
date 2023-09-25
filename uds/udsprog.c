@@ -3,16 +3,17 @@
 #include <string.h> 
 #include <stdbool.h>
 #include <unistd.h> 
-#include <arpa/inet.h>
+
 #include <sys/socket.h> 
-#include <netinet/in.h> 
+#include <sys/un.h>
+
 #include <errno.h>
 #include <time.h>
 #include <inttypes.h>
 
 #include "udsprog.h"
 
-// https://stackoverflow.com/questions/64893834/measuring-elapsed-time-using-clock-gettimeclock-monotonic
+// https://stackoverflow.com/questions/64893834/measuring-elapsed-time-usung-clock-gettimeclock-monotonic
 int64_t difftimespec_ns(const struct timespec after, const struct timespec before)
 {
     return ((int64_t)after.tv_sec - (int64_t)before.tv_sec) * (int64_t)1000000000
@@ -130,7 +131,7 @@ int main(int argc, char const *argv[])
     // Socket state
     int sock_fd = -1;
     int new_sock_fd = -1;
-    struct sockaddr_in server_addr; 
+    struct sockaddr_un server_addr; 
     int addrlen = sizeof(server_addr);
     int opt = 1;
     
@@ -139,7 +140,6 @@ int main(int argc, char const *argv[])
     int ret = EXIT_FAILURE;     
     
     // Args
-    int num_threads = 1;
     int msg_len = 1;
     bool is_server = false;
  
@@ -161,14 +161,7 @@ int main(int argc, char const *argv[])
         goto cleanup;    
     }
 
-    // Check second argument - number of threads to spawn
-    num_threads = atoi(argv[ARG_NUM_THREADS]);
-    if (num_threads < 1 || num_threads > MAX_NUM_THREADS) {
-        printf("ERROR: invalid number of threads. Should be 0 < num_threads <= %d, not %d\n", MAX_NUM_THREADS, num_threads);
-        goto cleanup;
-    } 
-
-    // Check third argument - the length of the messages to send
+    // Check second argument - the length of the messages to send
     msg_len = atoi(argv[ARG_MSG_LEN]);
     if (msg_len < 1 || msg_len > MAX_MSG_LEN) {
         printf("ERROR: invalid message length. Should be 0 < msg_len <= %d, not %d\n", MAX_MSG_LEN, msg_len);
@@ -176,33 +169,23 @@ int main(int argc, char const *argv[])
     } 
 
     // Create socket
-    if ((sock_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) { 
+    if ((sock_fd = socket(AF_UNIX, SOCK_STREAM, 0)) == 0) { 
         perror("socket failed"); 
         goto cleanup;
     } 
 
     // Set up local address
-    server_addr.sin_family = AF_INET; 
-    server_addr.sin_addr.s_addr = inet_addr(LOOPBACK_IP);
-    if (is_server) {
-        server_addr.sin_port = htons(LOOPBACK_PORT); 
-    } else {
-        server_addr.sin_port = htons(LOOPBACK_PORT + 1);
-    }
-
-    // Force to use port
-    if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,  &opt, sizeof(opt))) { 
-        perror("setsockopt"); 
-        goto cleanup;
-    }
-    
-    // Bind the socket to the ip/port
-    if (bind(sock_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) { 
-        perror("bind failed"); 
-        goto cleanup;
-    }
+    server_addr.sun_family = AF_UNIX; 
+    strncpy(server_addr.sun_path, UDS_PATH, 32);
 
     if (is_server) {
+        // Bind the socket to the path
+        unlink(UDS_PATH);
+        if (bind(sock_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) { 
+            perror("bind failed"); 
+            goto cleanup;
+        }
+
  	    // Listen for a connection
         if (listen(sock_fd, 1) < 0) { 
             perror("listen"); 
@@ -222,11 +205,6 @@ int main(int argc, char const *argv[])
             goto cleanup;
         }
     } else {
-        // Set up remote address
-        server_addr.sin_family = AF_INET; 
-        server_addr.sin_addr.s_addr = inet_addr(LOOPBACK_IP);
-        server_addr.sin_port = htons(LOOPBACK_PORT); 
-
         // Connect to the server
         if (0 > connect(sock_fd, (struct sockaddr *) &server_addr, sizeof(server_addr))) { 
             errnum = errno;
@@ -251,5 +229,6 @@ cleanup:
     if (new_sock_fd != -1) {
         close(new_sock_fd);
     }
+    unlink(UDS_PATH);
     return ret; 
 }

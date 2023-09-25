@@ -67,40 +67,58 @@ In a second terminal, run the client:
 
 Different:
 ```
+Total operations in the test is: 1001408.000000
+Average operations per second is: 33380.265625
 ```
 
 Same:
 ```
+Total operations in the test is: 1661504.000000
+Average operations per second is: 55383.464844
 ```
 
 Default:
 ```
+Total operations in the test is: 1694976.000000
+Average operations per second is: 56499.199219
 ```
 
 ### Msg len = 1024
 
 Different:
 ```
+Total operations in the test is: 988992.000000
+Average operations per second is: 32966.39843
 ```
 
 Same:
 ```
+Total operations in the test is: 1469696.000000
+Average operations per second is: 48989.867188
 ```
 
 Default:
 ```
+Total operations in the test is: 1385344.000000
+Average operations per second is: 46178.132812
 ```
 
 ### Msg len = 4096
 
 Different:
 ```
+Total operations in the test is: 753280.000000
+Average operations per second is: 25109.333984
 ```
 
 Same:
 ```
+Total operations in the test is: 1160320.000000
+Average operations per second is: 38677.332031
 ```
 
 Default:
 ```
+Total operations in the test is: 1011968.000000
+Average operations per second is: 33732.265625
 ```
