@@ -10,6 +10,28 @@
 
 #include "loopbackprog.h"
 
+int do_work(int sock_fd, int msg_len) {
+    char *msg_buffer = NULL;
+    int ret = EXIT_FAILURE;
+
+    // Initialize message buffer
+    if (NULL == (msg_buffer = malloc(msg_len))) {
+        goto work_cleanup;
+    }
+
+    
+
+    ret = EXIT_SUCCESS;
+
+work_cleanup:
+    // Free message buffer
+    if (NULL != msg_buffer) {
+        free(msg_buffer);
+    }
+
+    return ret;
+}
+
 int main(int argc, char const *argv[]) 
 { 
     // Socket state
@@ -102,6 +124,10 @@ int main(int argc, char const *argv[])
         }
         printf("Server accept!\n");
 
+        if (EXIT_SUCCESS != do_work(new_sock_fd, msg_len)) {
+            printf("do_work() failed\n");
+            goto cleanup;
+        }
     } else {
         // Set up remote address
         server_addr.sin_family = AF_INET; 
@@ -115,6 +141,11 @@ int main(int argc, char const *argv[])
             goto cleanup; 
         }
         printf("Client connect!\n");
+
+        if (EXIT_SUCCESS != do_work(sock_fd, msg_len)) {
+            printf("do_work() failed\n");
+            goto cleanup;
+        }
     } 
 
     ret = EXIT_SUCCESS;
