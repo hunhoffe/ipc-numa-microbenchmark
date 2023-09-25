@@ -47,6 +47,7 @@ numactl --cpunodebind=0 --membind=0 ./loopbackprog server 1 <msg_len>
 In another terminal, run the client:
 ```
 numactl --cpunodebind=1 --membind=1 ./loopbackprog client 1 <msg_len>
+```
 
 ### Run with default policy
 
