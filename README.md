@@ -2,7 +2,7 @@
 
 Diffferent IPC mechanisms to write a microbenchmark for:
 - [x] Socket (loopback device)
-- [ ] Named pipes
+- [x] Named pipes
 - [ ] Anonymous pipes
 - [x] Unix Domain socket
 - [ ] SysV Message Queues/POSIX Message Queues
