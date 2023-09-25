@@ -1,73 +1,26 @@
-// taken from: https://www.geeksforgeeks.org/socket-programming-cc/ and then modified
-#include <unistd.h> 
 #include <stdio.h> 
-#include <sys/socket.h> 
 #include <stdlib.h> 
-#include <netinet/in.h> 
 #include <string.h> 
 #include <stdbool.h>
+#include <unistd.h> 
+#include <arpa/inet.h>
+#include <sys/socket.h> 
+#include <netinet/in.h> 
+#include <errno.h>
 
 #include "loopbackprog.h"
-
-/*
-int receive_clients(int server_fd, struct sockaddr *address, size_t addrlen, int num_clients) {
-    char buffer[BUFF_LEN] = {0}; 
-    int bytes_read = -1;
-    int bytes_sent = -1;
-    int new_socket = -1;
-    int ret = EXIT_FAILURE;
-    int num_messages = num_clients == 1 ? 2 : 1;
-
-    for (int i = 0; i < num_clients; i++) {
-
-	    // Listen for a connection
-        if (listen(server_fd, 3) < 0) { 
-            perror("listen"); 
-            goto recv_cleanup;
-        } 
-	    // Accept the connection
-        if ((new_socket = accept(server_fd, address, (socklen_t*) &addrlen)) < 0) { 
-            perror("accept"); 
-            goto recv_cleanup;
-        }
-        printf("Accepted client connection.\n");
-
-        for (int j = 0; j < num_messages; j++) {
-	        // Read the client message	
-            if (0 >= (bytes_read = read(new_socket, buffer, BUFF_LEN))) {
-                perror("read");
-                goto recv_cleanup;
-            } 
-            buffer[bytes_read + 1] = '\0';  // Force null termination
-            //printf("%d - %s\n", bytes_read, buffer); 
-
-            // Send the server message
-            bytes_sent = send(new_socket , HELLO_SERVER_STR , strlen(HELLO_SERVER_STR) + 1 , 0 ); 
-            if (bytes_sent != strlen(HELLO_SERVER_STR) + 1) {
-                perror("send");
-                goto recv_cleanup;
-            }
-            //printf("Hello message sent\n"); 
-        }
-    }
-    ret = EXIT_SUCCESS;
-
-recv_cleanup:
-    if (new_socket) {
-        close(new_socket);    
-    }
-    return ret;
-}
-*/
 
 int main(int argc, char const *argv[]) 
 { 
     // Socket state
-    int server_fd;
-    struct sockaddr_in address; 
-    int addrlen = sizeof(address); 
+    int sock_fd = -1;
+    int new_sock_fd = -1;
+    struct sockaddr_in server_addr; 
+    int addrlen = sizeof(server_addr);
+    int opt = 1;
     
     // Other state
+    int errnum = -1;
     int ret = EXIT_FAILURE;     
     
     // Args
@@ -107,40 +60,72 @@ int main(int argc, char const *argv[])
         goto cleanup;
     } 
 
-    /*
-    // Creating socket file descriptor 
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) { 
+    // Create socket
+    if ((sock_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) { 
         perror("socket failed"); 
         goto cleanup;
     } 
-       
-    // Forcefully attaching socket to the port
-    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, 
-                                                  &opt, sizeof(opt))) { 
+
+    // Set up local address
+    server_addr.sin_family = AF_INET; 
+    server_addr.sin_addr.s_addr = inet_addr(LOOPBACK_IP);
+    if (is_server) {
+        server_addr.sin_port = htons(LOOPBACK_PORT); 
+    } else {
+        server_addr.sin_port = htons(LOOPBACK_PORT + 1);
+    }
+
+    // Force to use port
+    if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,  &opt, sizeof(opt))) { 
         perror("setsockopt"); 
         goto cleanup;
-    } 
-    address.sin_family = AF_INET; 
-    address.sin_addr.s_addr = INADDR_ANY; 
-    address.sin_port = htons( PORT ); 
-       
-    // Bind the socket to the port
-    if (bind(server_fd, (struct sockaddr *) &address, sizeof(address)) < 0) { 
+    }
+    
+    // Bind the socket to the ip/port
+    if (bind(sock_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) { 
         perror("bind failed"); 
         goto cleanup;
-    } 
-    
-    if (EXIT_SUCCESS != receive_clients(server_fd, (struct sockaddr *) &address, addrlen, num_client_socks)) {
-        perror("receive_clients failed");
-        goto cleanup;
     }
-    */
+
+    if (is_server) {
+ 	    // Listen for a connection
+        if (listen(sock_fd, 1) < 0) { 
+            perror("listen"); 
+            goto cleanup;
+        }
+        printf("Server listen!\n"); 
+
+	    // Accept the connection
+        if ((new_sock_fd = accept(sock_fd, (struct sockaddr *) &server_addr, (socklen_t*) &addrlen)) < 0) { 
+            perror("accept"); 
+            goto cleanup;
+        }
+        printf("Server accept!\n");
+
+    } else {
+        // Set up remote address
+        server_addr.sin_family = AF_INET; 
+        server_addr.sin_addr.s_addr = inet_addr(LOOPBACK_IP);
+        server_addr.sin_port = htons(LOOPBACK_PORT); 
+
+        // Connect to the server
+        if (0 > connect(sock_fd, (struct sockaddr *) &server_addr, sizeof(server_addr))) { 
+            errnum = errno;
+            printf("Connect failed. errno=%d, err=%s\n", errnum, strerror(errnum));
+            goto cleanup; 
+        }
+        printf("Client connect!\n");
+    } 
 
     ret = EXIT_SUCCESS;
+    printf("Exited successfully!\n");
 
 cleanup:
-    if (server_fd != -1) {
-        close(server_fd);
+    if (sock_fd != -1) {
+        close(sock_fd);
+    }
+    if (new_sock_fd != -1) {
+        close(new_sock_fd);
     }
     return ret; 
 }
