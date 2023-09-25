@@ -10,23 +10,47 @@
 
 #include "loopbackprog.h"
 
-int do_work(int sock_fd, int msg_len) {
-    char *msg_buffer = NULL;
+int send_wrapper(int sock_fd, char *buf, int msg_len) {
+    int bytes_sent = 0;
+    int send_ret = 0;
+
+    while (bytes_sent != msg_len) {
+        send_ret = send(sock_fd, buf, msg_len - bytes_sent, 0);
+        if (-1 == send_ret) {
+            perror("send");
+            return EXIT_FAILURE;
+        } else {
+            bytes_sent += send_ret;
+            buf += send_ret;
+        }
+    }
+    return EXIT_SUCCESS;
+}
+
+int do_work(int sock_fd, int msg_len, bool is_server) {
+    char *msg_buf = NULL;
     int ret = EXIT_FAILURE;
+    int bytes_sent = 0;
 
     // Initialize message buffer
-    if (NULL == (msg_buffer = malloc(msg_len))) {
+    if (NULL == (msg_buf = malloc(msg_len))) {
         goto work_cleanup;
     }
 
-    
+    // Send once to kick things off
+    if (is_server) {
+        if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
+            goto work_cleanup;
+        }
+    } else {
+    }
 
     ret = EXIT_SUCCESS;
 
 work_cleanup:
     // Free message buffer
-    if (NULL != msg_buffer) {
-        free(msg_buffer);
+    if (NULL != msg_buf) {
+        free(msg_buf);
     }
 
     return ret;
@@ -124,7 +148,7 @@ int main(int argc, char const *argv[])
         }
         printf("Server accept!\n");
 
-        if (EXIT_SUCCESS != do_work(new_sock_fd, msg_len)) {
+        if (EXIT_SUCCESS != do_work(new_sock_fd, msg_len, is_server)) {
             printf("do_work() failed\n");
             goto cleanup;
         }
@@ -142,7 +166,7 @@ int main(int argc, char const *argv[])
         }
         printf("Client connect!\n");
 
-        if (EXIT_SUCCESS != do_work(sock_fd, msg_len)) {
+        if (EXIT_SUCCESS != do_work(sock_fd, msg_len, is_server)) {
             printf("do_work() failed\n");
             goto cleanup;
         }
