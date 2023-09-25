@@ -27,7 +27,7 @@ int read_wrapper(int fd, char *buf, int msg_len) {
     while (bytes_sent != msg_len) {
         send_ret = read(fd, buf, msg_len - bytes_sent);
         if (-1 == send_ret) {
-            perror("write");
+            perror("read");
             return EXIT_FAILURE;
         } else {
             bytes_sent += send_ret;
@@ -44,7 +44,7 @@ int write_wrapper(int fd, char *buf, int msg_len) {
     while (bytes_recv != msg_len) {
         recv_ret = write(fd, buf, msg_len - bytes_recv);
         if (-1 == recv_ret) {
-            perror("read");
+            perror("write");
             return EXIT_FAILURE;
         } else {
             bytes_recv += recv_ret;
@@ -78,15 +78,9 @@ int do_work(int *fd, int msg_len, bool is_server) {
                     if (EXIT_SUCCESS != read_wrapper(fd[0], msg_buf, msg_len)) {
                         goto work_cleanup;
                     }
-                    if (EXIT_SUCCESS != write_wrapper(fd[1], msg_buf, msg_len)) {
-                        goto work_cleanup;
-                    }
                 } else {
                     // Write and then read
                     if (EXIT_SUCCESS != write_wrapper(fd[1], msg_buf, msg_len)) {
-                        goto work_cleanup;
-                    }
-                    if (EXIT_SUCCESS != read_wrapper(fd[0], msg_buf, msg_len)) {
                         goto work_cleanup;
                     }
                 }
@@ -231,11 +225,13 @@ int main(int argc, char const *argv[])
     printf("Exited successfully!\n");
 
 cleanup:
-    if (-1 != pipe_fds[0]) {
-        close(pipe_fds[0]);
-    }
-    if (-1 != pipe_fds[1]) {
-        close(pipe_fds[1]);
+    if (is_server) {
+        if (-1 != pipe_fds[0]) {
+            close(pipe_fds[0]);
+        }
+        if (-1 != pipe_fds[1]) {
+            close(pipe_fds[1]);
+        }
     }
     if (-1 != server_pid_fd) {
         close(server_pid_fd);
