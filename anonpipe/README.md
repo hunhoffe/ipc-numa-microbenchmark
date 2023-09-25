@@ -2,9 +2,9 @@
 
 ## Description
 
-Create a server and a client. The client sends messages of size n over an anonymous pipe to the server.
+Create a server and a client. The client and server send/recv messages of size n over an anonymous pipe.
 
-The number of messages exchanged (1 send = 1 operation) is measured per second for 30 seconds.
+The number of messages exchanged (recv + send = 1 operation) is measured per second for 30 seconds.
 
 ## Building
 
@@ -57,7 +57,7 @@ In one terminal, start the server:
 
 In a second terminal, run the client:
 ```
-./anonpipeprog client 1 <msg_len>
+sudo ./anonpipeprog client 1 <msg_len>
 ```
 
 ## Results

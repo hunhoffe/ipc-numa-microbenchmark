@@ -5,14 +5,13 @@
 #include <unistd.h> 
 
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
+#include <sys/syscall.h>
 
 #include <errno.h>
 #include <time.h>
 #include <inttypes.h>
 
-#include "namedpipeprog.h"
+#include "anonpipeprog.h"
 
 // https://stackoverflow.com/questions/64893834/measuring-elapsed-time-usung-clock-gettimeclock-monotonic
 int64_t difftimespec_ns(const struct timespec after, const struct timespec before)
@@ -55,7 +54,7 @@ int write_wrapper(int fd, char *buf, int msg_len) {
     return EXIT_SUCCESS;
 }
 
-int do_work(int fd, int msg_len, bool is_server) {
+int do_work(int *fd, int msg_len, bool is_server) {
     char *msg_buf = NULL;
     int ret = EXIT_FAILURE;
     struct timespec currentStartTime = { 0 };
@@ -75,13 +74,19 @@ int do_work(int fd, int msg_len, bool is_server) {
         while (true) {
             for (int i = 0; i < OPS_PER_CHECK; i++) {
                 if (is_server) {
-                    // Read only
-                    if (EXIT_SUCCESS != read_wrapper(fd, msg_buf, msg_len)) {
+                    // Read then write
+                    if (EXIT_SUCCESS != read_wrapper(fd[0], msg_buf, msg_len)) {
+                        goto work_cleanup;
+                    }
+                    if (EXIT_SUCCESS != write_wrapper(fd[1], msg_buf, msg_len)) {
                         goto work_cleanup;
                     }
                 } else {
-                    // Write only
-                    if (EXIT_SUCCESS != write_wrapper(fd, msg_buf, msg_len)) {
+                    // Write and then read
+                    if (EXIT_SUCCESS != write_wrapper(fd[1], msg_buf, msg_len)) {
+                        goto work_cleanup;
+                    }
+                    if (EXIT_SUCCESS != read_wrapper(fd[0], msg_buf, msg_len)) {
                         goto work_cleanup;
                     }
                 }
@@ -122,17 +127,19 @@ work_cleanup:
 int main(int argc, char const *argv[]) 
 { 
     // Socket state
-    int pipe_fd = -1;
+    int pipe_fds[2] = {-1, -1};
     
     // Other state
     int ret = EXIT_FAILURE;     
+    int server_pid = -1;
+    int server_pid_fd = -1;
     
     // Args
     int msg_len = 1;
     bool is_server = false;
  
     // Check number of arguments 
-	if (NUM_ARGS != argc) {
+	if (NUM_ARGS > argc) {
 		printf("ERROR: Wrong number of arguments\n");
 		printf(USAGE_STR);
 		goto cleanup;
@@ -149,7 +156,7 @@ int main(int argc, char const *argv[])
         goto cleanup;    
     }
 
-    // Check second argument - the length of the messages to send
+    // check second argument - the length of the messages to send
     msg_len = atoi(argv[ARG_MSG_LEN]);
     if (msg_len < 1 || msg_len > MAX_MSG_LEN) {
         printf("ERROR: invalid message length. Should be 0 < msg_len <= %d, not %d\n", MAX_MSG_LEN, msg_len);
@@ -157,30 +164,64 @@ int main(int argc, char const *argv[])
     } 
 
     if (is_server) {
-        // Create named pipe
-        if (0 != mkfifo(PIPE_PATH, 0777)) {
+        // Make sure no extra args
+        if (NUM_ARGS != argc) {
+            printf("ERROR: Wrong number of arguments (expected: %d, actual: %d)\n", NUM_ARGS, argc);
+            printf(USAGE_STR);
+            goto cleanup;
+        }
+
+        // Create anonymous pipe
+        if (0 != pipe(pipe_fds)) {
             perror("mkfifo");
             goto cleanup;
         }
+        printf("Server PID: %d, fd[0]=%d, fd[1]=%d\n", getpid(), pipe_fds[0], pipe_fds[1]);
 
-        // Open pipe for reading
-        if ((pipe_fd = open(PIPE_PATH, O_RDONLY)) == -1) {
-            perror("openRead");
-            goto cleanup;
-        }
-
-        if (EXIT_SUCCESS != do_work(pipe_fd, msg_len, is_server)) {
+        if (EXIT_SUCCESS != do_work(pipe_fds, msg_len, is_server)) {
             printf("do_work() failed\n");
             goto cleanup;
         }
     } else {
-        // Open pipe for writing
-        if ((pipe_fd = open(PIPE_PATH, O_WRONLY)) == -1) {
-            perror("openWrite");
+        // Check for client specific arguments, namely server pid and fd number
+        if (NUM_ARGS + 3 != argc) {
+            printf("ERROR: Wrong number of arguments\n");
+            printf(USAGE_STR);
             goto cleanup;
         }
 
-        if (EXIT_SUCCESS != do_work(pipe_fd, msg_len, is_server)) {
+        // Check third argument - server pid
+        server_pid = atoi(argv[ARG_SERVER_PID]);
+        if (server_pid <= 1) {
+            printf("ERROR: invalid server PID. Should be 1 < server_pid, not %d\n", server_pid);
+            goto cleanup;
+        } 
+
+        // Check fourth and fifth arguments - fds from server
+        pipe_fds[0] = atoi(argv[ARG_SERVER_FD1]);
+        pipe_fds[1] = atoi(argv[ARG_SERVER_FD2]);
+        if (pipe_fds[0] < 0 || pipe_fds[1] < 0) {
+            printf("ERROR: invalid server file descriptor(s): [%d, %d]\n", pipe_fds[0], pipe_fds[1]);
+            goto cleanup;
+        }
+
+        // Get a fd to the server pid
+        if (-1 == (server_pid_fd = syscall(SYS_pidfd_open, server_pid, 0))) {
+            perror("pidfd_open");
+            goto cleanup;
+        }
+
+        // Get a copy of the server fds to the pipe
+        if (-1 == (pipe_fds[0] = syscall(SYS_pidfd_getfd, server_pid_fd, pipe_fds[0], 0))) {
+            perror("pidfd_getfd 0");
+            goto cleanup;
+        }
+        if (-1 == (pipe_fds[1] = syscall(SYS_pidfd_getfd, server_pid_fd, pipe_fds[1], 0))) {
+            perror("pidfd_getfd 1");
+            goto cleanup;
+        }
+
+        if (EXIT_SUCCESS != do_work(pipe_fds, msg_len, is_server)) {
             printf("do_work() failed\n");
             goto cleanup;
         }
@@ -190,11 +231,14 @@ int main(int argc, char const *argv[])
     printf("Exited successfully!\n");
 
 cleanup:
-    if (-1 != pipe_fd) {
-        close(pipe_fd);
+    if (-1 != pipe_fds[0]) {
+        close(pipe_fds[0]);
     }
-    if (is_server) {
-        unlink(PIPE_PATH);
+    if (-1 != pipe_fds[1]) {
+        close(pipe_fds[1]);
+    }
+    if (-1 != server_pid_fd) {
+        close(server_pid_fd);
     }
     return ret; 
 }
