@@ -13,7 +13,7 @@
 #define LOOPBACK_PORT 10110
 
 #define ONE_SEC_NS 1000000000L
-#define SEC_PER_TEST 60
+#define SEC_PER_TEST 30
 #define OPS_PER_CHECK 64
 
 #endif /* __LOOPBACKPROG_H */
