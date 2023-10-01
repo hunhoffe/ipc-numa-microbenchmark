@@ -23,4 +23,5 @@ There are a lot of options that fit this description in CloudLab. A few of the s
 * c6220 (APT) / 2 sockets / 8 cores / 2 hw threads per core
 * dss7500 / 2 sockets / 6 cores / 2 hw threads per core
 
-Since there are many d430s, I'll start there.
+Since there are many d430s, I'll start there. First up is to disable hyperthreading.
+
