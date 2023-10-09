@@ -65,9 +65,14 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
     int64_t timediff = 0;
     long results[SEC_PER_TEST] = { 0 };
 
-    // Initialize message buffer
-    if (NULL == (msg_buf = malloc(msg_len))) {
+    // Initialize LARGE buffer (will be used as message buffer)
+    if (NULL == (msg_buf = malloc(BUF_SIZE))) {
+	perror("malloc");
         goto work_cleanup;
+    }
+    // Touch every 256 bytes to ensure allocation
+    for (size_t i = 0; i < BUF_SIZE; i += 512) {
+    	msg_buf[i] = 1;
     }
 
     for (int sec = 0; sec < SEC_PER_TEST; sec++) {
@@ -77,18 +82,18 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
             for (int i = 0; i < OPS_PER_CHECK; i++) {
                 if (is_server) {
                     // Send then receive
-                    if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
+                    if (EXIT_SUCCESS != send_wrapper(sock_fd, &(msg_buf[((iterations + i) * msg_len) % (BUF_SIZE - msg_len)]), msg_len)) {
                         goto work_cleanup;
                     }
-                    if (EXIT_SUCCESS != recv_wrapper(sock_fd, msg_buf, msg_len)) {
+                    if (EXIT_SUCCESS != recv_wrapper(sock_fd, &(msg_buf[((iterations + i) * msg_len) % (BUF_SIZE - msg_len)]), msg_len)) {
                         goto work_cleanup;
                     }
                 } else {
                     // Receive then send
-                    if (EXIT_SUCCESS != recv_wrapper(sock_fd, msg_buf, msg_len)) {
+                    if (EXIT_SUCCESS != recv_wrapper(sock_fd, &(msg_buf[((iterations + i) * msg_len) % (BUF_SIZE - msg_len)]), msg_len)) {
                         goto work_cleanup;
                     }
-                    if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
+                    if (EXIT_SUCCESS != send_wrapper(sock_fd, &(msg_buf[((iterations + i) * msg_len) % (BUF_SIZE - msg_len)]), msg_len)) {
                         goto work_cleanup;
                     }
                 }
@@ -134,6 +139,7 @@ int main(int argc, char const *argv[])
     struct sockaddr_un server_addr; 
     int addrlen = sizeof(server_addr);
     int opt = 1;
+    const char *uds_path;
     
     // Other state
     int errnum = -1;
@@ -168,6 +174,9 @@ int main(int argc, char const *argv[])
         goto cleanup;
     } 
 
+    // Third argument - the uds name.
+    uds_path = argv[ARG_UDS_NAME];
+
     // Create socket
     if ((sock_fd = socket(AF_UNIX, SOCK_STREAM, 0)) == 0) { 
         perror("socket failed"); 
@@ -176,11 +185,11 @@ int main(int argc, char const *argv[])
 
     // Set up local address
     server_addr.sun_family = AF_UNIX; 
-    strncpy(server_addr.sun_path, UDS_PATH, 32);
+    strncpy(server_addr.sun_path, uds_path, 32);
 
     if (is_server) {
         // Bind the socket to the path
-        unlink(UDS_PATH);
+        unlink(uds_path);
         if (bind(sock_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) { 
             perror("bind failed"); 
             goto cleanup;
@@ -229,6 +238,5 @@ cleanup:
     if (new_sock_fd != -1) {
         close(new_sock_fd);
     }
-    unlink(UDS_PATH);
     return ret; 
 }
