@@ -73,18 +73,38 @@ Average of 10 is: 63775.78671860001
 
 ## Baseline: AutoNUMA turned off (affinity not set)
 ```
-Total operations in the test is: 3106240.000000
-Average operations per second is: 103541.335938
+Total operations in the test is: 3252992.000000
+Average operations per second is: 108433.070312
 
-Total operations in the test is: 3033152.000000
-Average operations per second is: 101105.070312
+Total operations in the test is: 3001920.000000
+Average operations per second is: 100064.000000
 
-Total operations in the test is: 2958464.000000
-Average operations per second is: 98615.468750
+Total operations in the test is: 3054336.000000
+Average operations per second is: 101811.203125
 
-Total operations in the test is: 2747264.000000
-Average operations per second is: 91575.468750
+Total operations in the test is: 2952704.000000
+Average operations per second is: 98423.468750
+
+Total operations in the test is: 2824704.000000
+Average operations per second is: 94156.796875
+
+Total operations in the test is: 3047104.000000
+Average operations per second is: 101570.132812
+
+Total operations in the test is: 3121984.000000
+Average operations per second is: 104066.132812
+
+Total operations in the test is: 3166976.000000
+Average operations per second is: 105565.867188
+
+Total operations in the test is: 3013504.000000
+Average operations per second is: 100450.132812
+
+Total operations in the test is: 3035008.000000
+Average operations per second is: 101166.929688
 ```
+
+Average of 10 is: 101570.7734374
 
 ## Baseline: AutoNUMA turned on (affinity not set)
 ```
