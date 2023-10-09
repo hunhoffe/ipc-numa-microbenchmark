@@ -3,7 +3,7 @@
 * Finish writing initial benches for all IPC types.
 * Then, for promising ones, attempt to control environment
   * Use smaller node on CloudLab (more pressure on AutoNuma to load balance)
-  * Scenario 1: Make client/server processes largeer (spinning threads, large mem allocation w/ touches to that memory) - 1/2 node size maybe (want it theoretically possible to colocate)
+  * Scenario 1: Make client/server processes larger (spinning threads, large mem allocation w/ touches to that memory) - 1/2 node size maybe (want it theoretically possible to colocate)
   * Scenario 2: Start pinned dummy process node1, start server, start dummy process, start client. All 4 process take ~1/2 available resources.
 * When rerunning, monitor core/memory placement by polling:
   * ```numastat``` for memory
@@ -24,3 +24,8 @@ Different workloads, different things:
 * Some will be locality bound
 * Some will be bandwidth bound
 Centralized 
+
+Some setup:
+* Less cores/threads total: ```echo off | sudo tee /sys/devices/system/cpu/smt/control``` https://serverfault.com/questions/235825/disable-hyperthreading-from-within-linux-no-access-to-bios
+* Set scaling governor to performance
+* 
