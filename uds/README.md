@@ -29,36 +29,36 @@ by checking/writing 1 to ```/proc/sys/kernel/numa_balancing```.
 
 In one terminal, start the server:
 ```
-numactl --cpunodebind=1 --membind=1 ./udsprog server 1 <msg_len>
+numactl --cpunodebind=1 --membind=1 ./udsprog server <msg_len>
 ```
 
 In another terminal, run the client:
 ```
-numactl --cpunodebind=1 --membind=1 ./udsprog client 1 <msg_len>
+numactl --cpunodebind=1 --membind=1 ./udsprog client <msg_len>
 ```
 
 #### Run on different nodes
 
 In one terminal, start the server:
 ```
-numactl --cpunodebind=0 --membind=0 ./udsprog server 1 <msg_len>
+numactl --cpunodebind=0 --membind=0 ./udsprog server <msg_len>
 ```
 
 In another terminal, run the client:
 ```
-numactl --cpunodebind=1 --membind=1 ./udsprog client 1 <msg_len>
+numactl --cpunodebind=1 --membind=1 ./udsprog client <msg_len>
 ```
 
 ### Run with default policy
 
 In one terminal, start the server:
 ```
-./udsprog server 1 <msg_len>
+./udsprog server <msg_len>
 ```
 
 In a second terminal, run the client:
 ```
-./udsprog client 1 <msg_len>
+./udsprog client <msg_len>
 ```
 
 ## Results
