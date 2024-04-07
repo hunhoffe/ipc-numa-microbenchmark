@@ -25,3 +25,44 @@ There are a lot of options that fit this description in CloudLab. A few of the s
 
 Since there are many d430s, I'll start there. First up is to disable hyperthreading.
 
+## Environment Setup
+
+* Create small-lan CloudLab experiment with d430 node w/ the Ubuntu 22.04 image.
+* Install dependencies 
+  ```bash
+  sudo apt update
+  sudo apt install -y numactl linux-tools-common linux-tools-5.15.0-86-generic
+  ```
+* Use script from [here](https://www.alexgallego.org/perf/compiler/explorer/flatbuffers/smf/2018/06/30/effects-cpu-turbo.html) to set high/low frequencies
+  ```
+  # Load the functions
+  source set_frequency.sh
+
+  # Set cpu to performance
+  # sudo cpupower frequency-set --governor performance
+  cpu_enable_performance_cpupower_state
+
+  # Get the high/low frequencies
+  cpu_available_frequencies
+
+  # Set min freq to max freq
+  cpu_set_min_frequencies <MAX_FREQ>
+  cpu_set_max_frequencies <MAX_FREQ>
+  ```
+* Disable hyperthreading
+  ```bash
+  echo off | sudo tee /sys/devices/system/cpu/smt/control
+  ```
+
+## Benchmark setup
+
+* Clone this git repo
+  ```bash
+  git clone git@github.com:hunhoffe/flatbufferbench.git
+  ```
+* Run the install script
+  ```bash
+  cd flatbufferbench
+  ./install_flatbuffers.sh
+  ```
+
