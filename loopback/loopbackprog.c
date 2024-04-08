@@ -24,13 +24,12 @@ int send_wrapper(int sock_fd, char *buf, int msg_len) {
     int send_ret = 0;
 
     while (bytes_sent != msg_len) {
-        send_ret = send(sock_fd, buf, msg_len - bytes_sent, 0);
-        if (-1 == send_ret) {
-            perror("send");
-            return EXIT_FAILURE;
-        } else {
+        if (0 >= (send_ret = send(sock_fd, buf, msg_len - bytes_sent, 0))) {
             bytes_sent += send_ret;
             buf += send_ret;
+        } else {
+            perror("send");
+            return EXIT_FAILURE;
         }
     }
     return EXIT_SUCCESS;
@@ -41,13 +40,12 @@ int recv_wrapper(int sock_fd, char *buf, int msg_len) {
     int recv_ret = 0;
 
     while (bytes_recv != msg_len) {
-        recv_ret = recv(sock_fd, buf, msg_len - bytes_recv, MSG_WAITALL);
-        if (-1 == recv_ret) {
-            perror("recv");
-            return EXIT_FAILURE;
-        } else {
+        if (0 >= (recv_ret = recv(sock_fd, buf, msg_len - bytes_recv, MSG_WAITALL))) {
             bytes_recv += recv_ret;
             buf += recv_ret;
+        } else {
+            perror("recv");
+            return EXIT_FAILURE;
         }
     }
     return EXIT_SUCCESS;
@@ -60,7 +58,7 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
     struct timespec currentStartTime = { 0 };
     struct timespec currentTime = { 0 };
     struct timespec duration = { 0 };
-    long iterations = 0;
+    long num_ops = 0;
     int64_t timediff = 0;
     long results[SEC_PER_TEST] = { 0 };
 
@@ -92,22 +90,22 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
                     }
                 }
             }
-            iterations += OPS_PER_CHECK;
+            num_ops += OPS_PER_CHECK;
 
             clock_gettime(CLOCK_MONOTONIC, &currentTime);
             timediff = difftimespec_ns(currentTime, currentStartTime);
             //printf("Difference is: %09" PRIi64 " \n", timediff);
-            if (timediff > ONE_SEC_NS) {
+            if (timediff >= ONE_SEC_NS) {
                 break;
             }
         }
-        results[sec] = iterations;
-        iterations = 0;
+        results[sec] = num_ops;
+        num_ops = 0;
     }
 
     float total = 0;
     for (int sec = 0; sec < SEC_PER_TEST; sec++) {
-        printf("In second %d, ran %lu iterations.\n", sec, results[sec]);
+        printf("In second %d, ran %lu operations.\n", sec, results[sec]);
         total += (float) results[sec];
     }
     printf("Total operations in the test is: %f\n", total);
@@ -190,19 +188,19 @@ int main(int argc, char const *argv[])
         server_addr.sin_port = htons(LOOPBACK_PORT + 1);
     }
 
-    // Force to use port
-    if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,  &opt, sizeof(opt))) { 
-        perror("setsockopt"); 
-        goto cleanup;
-    }
-    
-    // Bind the socket to the ip/port
-    if (bind(sock_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) { 
-        perror("bind failed"); 
-        goto cleanup;
-    }
-
     if (is_server) {
+        // Force to use port
+        if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,  &opt, sizeof(opt))) { 
+            perror("setsockopt"); 
+            goto cleanup;
+        }
+    
+        // Bind the socket to the ip/port
+        if (bind(sock_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) { 
+            perror("bind failed"); 
+            goto cleanup;
+        }
+
  	    // Listen for a connection
         if (listen(sock_fd, 1) < 0) { 
             perror("listen"); 
