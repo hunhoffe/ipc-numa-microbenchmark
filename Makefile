@@ -1,4 +1,6 @@
 CC = gcc
+CFLAGS=-O3 -Werror -Wall -Wextra
+
 BINDIR=bin
 
 .PHONY : all
@@ -8,7 +10,7 @@ setup:
 	mkdir -p ${BINDIR}
 
 loopbackprog :
-	$(CC) -o ${BINDIR}/loopbackprog -Iloopback loopback/loopbackprog.c
+	$(CC) $(CFLAGS) -o ${BINDIR}/loopbackprog -Iloopback loopback/loopbackprog.c
 
 .PHONY : clean
 clean :

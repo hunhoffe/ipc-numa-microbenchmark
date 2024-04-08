@@ -54,10 +54,8 @@ int recv_wrapper(int sock_fd, char *buf, int msg_len) {
 int do_work(int sock_fd, int msg_len, bool is_server) {
     char *msg_buf = NULL;
     int ret = EXIT_FAILURE;
-    int bytes_sent = 0;
     struct timespec currentStartTime = { 0 };
     struct timespec currentTime = { 0 };
-    struct timespec duration = { 0 };
     long num_ops = 0;
     int64_t timediff = 0;
     long results[SEC_PER_TEST] = { 0 };
