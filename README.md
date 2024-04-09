@@ -53,3 +53,7 @@ Since there are many d430s, I'll start there. First up is to disable hyperthread
   ```bash
   echo off | sudo tee /sys/devices/system/cpu/smt/control
   ```
+* Ensure AutoNUMA is enabled (should be 1)
+  ```bash
+  cat /proc/sys/kernel/numa_balancing
+  ```

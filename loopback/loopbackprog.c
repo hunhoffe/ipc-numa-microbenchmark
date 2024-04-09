@@ -12,13 +12,6 @@
 
 #include "loopbackprog.h"
 
-// https://stackoverflow.com/questions/64893834/measuring-elapsed-time-using-clock-gettimeclock-monotonic
-int64_t difftimespec_ns(const struct timespec after, const struct timespec before)
-{
-    return ((int64_t)after.tv_sec - (int64_t)before.tv_sec) * (int64_t)1000000000
-         + ((int64_t)after.tv_nsec - (int64_t)before.tv_nsec);
-}
-
 int send_wrapper(int sock_fd, char *buf, int msg_len) {
     int bytes_sent = 0;
     int send_ret = 0;

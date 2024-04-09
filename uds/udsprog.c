@@ -13,20 +13,12 @@
 
 #include "udsprog.h"
 
-// https://stackoverflow.com/questions/64893834/measuring-elapsed-time-usung-clock-gettimeclock-monotonic
-int64_t difftimespec_ns(const struct timespec after, const struct timespec before)
-{
-    return ((int64_t)after.tv_sec - (int64_t)before.tv_sec) * (int64_t)1000000000
-         + ((int64_t)after.tv_nsec - (int64_t)before.tv_nsec);
-}
-
 int send_wrapper(int sock_fd, char *buf, int msg_len) {
     int bytes_sent = 0;
     int send_ret = 0;
 
     while (bytes_sent != msg_len) {
-        send_ret = send(sock_fd, buf, msg_len - bytes_sent, 0);
-        if (-1 == send_ret) {
+        if (-1 == (send_ret = send(sock_fd, buf, msg_len - bytes_sent, 0))) {
             perror("send");
             return EXIT_FAILURE;
         } else {
@@ -42,8 +34,7 @@ int recv_wrapper(int sock_fd, char *buf, int msg_len) {
     int recv_ret = 0;
 
     while (bytes_recv != msg_len) {
-        recv_ret = recv(sock_fd, buf, msg_len - bytes_recv, MSG_WAITALL);
-        if (-1 == recv_ret) {
+        if (-1 == (recv_ret = recv(sock_fd, buf, msg_len - bytes_recv, MSG_WAITALL))) {
             perror("recv");
             return EXIT_FAILURE;
         } else {
@@ -57,10 +48,8 @@ int recv_wrapper(int sock_fd, char *buf, int msg_len) {
 int do_work(int sock_fd, int msg_len, bool is_server) {
     char *msg_buf = NULL;
     int ret = EXIT_FAILURE;
-    int bytes_sent = 0;
     struct timespec currentStartTime = { 0 };
     struct timespec currentTime = { 0 };
-    struct timespec duration = { 0 };
     long iterations = 0;
     int64_t timediff = 0;
     long results[SEC_PER_TEST] = { 0 };
@@ -138,7 +127,6 @@ int main(int argc, char const *argv[])
     int new_sock_fd = -1;
     struct sockaddr_un server_addr; 
     int addrlen = sizeof(server_addr);
-    int opt = 1;
     const char *uds_path;
     
     // Other state
@@ -152,7 +140,7 @@ int main(int argc, char const *argv[])
     // Check number of arguments 
 	if (NUM_ARGS != argc) {
 		printf("ERROR: Wrong number of arguments\n");
-		printf(USAGE_STR);
+		printf("Usage: %s %s\n", argv[0], USAGE_STR);
 		goto cleanup;
 	}
 
@@ -163,7 +151,7 @@ int main(int argc, char const *argv[])
         is_server = true;
     } else {
         printf("ERROR: arg %d should be \"server\" or \"client\"\n", ARG_CLIENT_SERVER - 1);
-        printf(USAGE_STR);
+        printf("Usage: %s %s\n", argv[0], USAGE_STR);
         goto cleanup;    
     }
 
@@ -175,7 +163,7 @@ int main(int argc, char const *argv[])
     } 
 
     // Third argument - the uds name.
-    uds_path = argv[ARG_UDS_NAME];
+    uds_path = UDS_PATH;
 
     // Create socket
     if ((sock_fd = socket(AF_UNIX, SOCK_STREAM, 0)) == 0) { 
