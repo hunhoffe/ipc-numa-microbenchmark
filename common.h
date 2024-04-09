@@ -9,6 +9,6 @@
 
 #define ONE_SEC_NS 1000000000L
 #define SEC_PER_TEST 30
-#define OPS_PER_CHECK 128
+#define OPS_PER_CHECK 64
 
 #endif /* __LOOPBACKPROG_H */

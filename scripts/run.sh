@@ -4,7 +4,7 @@ ITERATIONS=10
 BASELINE_PREFIX=" "
 NUMA_0_PREFIX="numactl --cpunodebind=0 --membind=0"
 NUMA_1_PREFIX="numactl --cpunodebind=1 --membind=1"
-MSG_SIZE=1024
+MSG_SIZE=4096
 
 BINDIR=$(git rev-parse --show-toplevel)
 BINDIR=$BINDIR/bin
@@ -37,6 +37,12 @@ run_tests() {
     pkill $binname
 }
 
+if [ "$#" -ne 1 ]; then
+    echo "Illegal number of parameters"
+    echo "Usage: $0 <output_dir>"
+    exit -1
+fi
+
 # First argument is the log output directory
 LOGDIR=$1
 rm -rf $LOGDIR # TODO(erika): delete this line later. Only for testing.  
@@ -47,9 +53,9 @@ echo "==== Looking for binaries in: $BINDIR"
 for file in $BINDIR/*; do 
     if [ -f "$file" ]; then 
         echo "$file"
-        run_tests $file "base" $LOGDIR $ITERATIONS $MSG_SIZE $BASELINE_PREFIX $BASELINE_PREFIX 
-        run_tests $file "best" $LOGDIR $ITERATIONS $MSG_SIZE $NUMA_0_PREFIX $NUMA_0_PREFIX 
-        run_tests $file "worst" $LOGDIR $ITERATIONS $MSG_SIZE $NUMA_0_PREFIX $NUMA_1_PREFIX
+        run_tests $file "base" $LOGDIR $ITERATIONS $MSG_SIZE "$BASELINE_PREFIX" "$BASELINE_PREFIX"
+        run_tests $file "best" $LOGDIR $ITERATIONS $MSG_SIZE "$NUMA_0_PREFIX" "$NUMA_0_PREFIX"
+        run_tests $file "worst" $LOGDIR $ITERATIONS $MSG_SIZE "$NUMA_0_PREFIX" "$NUMA_1_PREFIX"
     fi 
 done
 

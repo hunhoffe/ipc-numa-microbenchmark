@@ -2,9 +2,9 @@
 
 Diffferent IPC mechanisms to write a microbenchmark for:
 - [x] Socket (loopback device)
-- [x] Named pipes
+- [ ] Named pipes
 - [ ] Anonymous pipes
-- [x] Unix Domain socket
+- [ ] Unix Domain socket
 - [ ] SysV Message Queues/POSIX Message Queues
 - [ ] Signals
 - [ ] D-Bus subsystem
@@ -53,16 +53,3 @@ Since there are many d430s, I'll start there. First up is to disable hyperthread
   ```bash
   echo off | sudo tee /sys/devices/system/cpu/smt/control
   ```
-
-## Benchmark setup
-
-* Clone this git repo
-  ```bash
-  git clone git@github.com:hunhoffe/flatbufferbench.git
-  ```
-* Run the install script
-  ```bash
-  cd flatbufferbench
-  ./install_flatbuffers.sh
-  ```
-
