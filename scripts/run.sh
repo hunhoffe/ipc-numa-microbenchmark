@@ -36,7 +36,7 @@ run_tests() {
         echo "==== iteration $i" >> $server_log_file
         $server_prefix $bin server $msg_size >> $server_log_file &
         server_pid=$!
-        sleep 0.1
+        sleep 3
         $client_prefix $bin client $msg_size >> $client_log_file
         wait $server_pid # put server to foreground to make sure it terminates before we begin again
     done

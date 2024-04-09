@@ -4,6 +4,8 @@
 #include "../common.h"
 
 #define BUF_SIZE 1073741824
-#define UDS_PATH "udstest"
+
+// If you change this, change also in run script
+#define UDS_PATH "/tmp/udstest"
 
 #endif /* __UDSPROG_H */

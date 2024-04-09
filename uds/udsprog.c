@@ -1,133 +1,21 @@
-#include <stdio.h> 
-#include <stdlib.h> 
-#include <string.h> 
-#include <stdbool.h>
-#include <unistd.h> 
-
-#include <sys/socket.h> 
-#include <sys/un.h>
-
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <time.h>
-#include <inttypes.h>
+#include <unistd.h>
 
 #include "udsprog.h"
-
-int send_wrapper(int sock_fd, char *buf, int msg_len) {
-    int bytes_sent = 0;
-    int send_ret = 0;
-
-    while (bytes_sent != msg_len) {
-        if (-1 == (send_ret = send(sock_fd, buf, msg_len - bytes_sent, 0))) {
-            perror("send");
-            return EXIT_FAILURE;
-        } else {
-            bytes_sent += send_ret;
-            buf += send_ret;
-        }
-    }
-    return EXIT_SUCCESS;
-}
-
-int recv_wrapper(int sock_fd, char *buf, int msg_len) {
-    int bytes_recv = 0;
-    int recv_ret = 0;
-
-    while (bytes_recv != msg_len) {
-        if (-1 == (recv_ret = recv(sock_fd, buf, msg_len - bytes_recv, MSG_WAITALL))) {
-            perror("recv");
-            return EXIT_FAILURE;
-        } else {
-            bytes_recv += recv_ret;
-            buf += recv_ret;
-        }
-    }
-    return EXIT_SUCCESS;
-}
-
-int do_work(int sock_fd, int msg_len, bool is_server) {
-    char *msg_buf = NULL;
-    int ret = EXIT_FAILURE;
-    struct timespec currentStartTime = { 0 };
-    struct timespec currentTime = { 0 };
-    long iterations = 0;
-    int64_t timediff = 0;
-    long results[SEC_PER_TEST] = { 0 };
-
-    // Initialize LARGE buffer (will be used as message buffer)
-    if (NULL == (msg_buf = malloc(BUF_SIZE))) {
-	perror("malloc");
-        goto work_cleanup;
-    }
-    // Touch every 256 bytes to ensure allocation
-    for (size_t i = 0; i < BUF_SIZE; i += 512) {
-    	msg_buf[i] = 1;
-    }
-
-    for (int sec = 0; sec < SEC_PER_TEST; sec++) {
-        clock_gettime(CLOCK_MONOTONIC, &currentStartTime);
-
-        while (true) {
-            for (int i = 0; i < OPS_PER_CHECK; i++) {
-                if (is_server) {
-                    // Send then receive
-                    if (EXIT_SUCCESS != send_wrapper(sock_fd, &(msg_buf[((iterations + i) * msg_len) % (BUF_SIZE - msg_len)]), msg_len)) {
-                        goto work_cleanup;
-                    }
-                    if (EXIT_SUCCESS != recv_wrapper(sock_fd, &(msg_buf[((iterations + i) * msg_len) % (BUF_SIZE - msg_len)]), msg_len)) {
-                        goto work_cleanup;
-                    }
-                } else {
-                    // Receive then send
-                    if (EXIT_SUCCESS != recv_wrapper(sock_fd, &(msg_buf[((iterations + i) * msg_len) % (BUF_SIZE - msg_len)]), msg_len)) {
-                        goto work_cleanup;
-                    }
-                    if (EXIT_SUCCESS != send_wrapper(sock_fd, &(msg_buf[((iterations + i) * msg_len) % (BUF_SIZE - msg_len)]), msg_len)) {
-                        goto work_cleanup;
-                    }
-                }
-            }
-            iterations += OPS_PER_CHECK;
-
-            clock_gettime(CLOCK_MONOTONIC, &currentTime);
-            timediff = difftimespec_ns(currentTime, currentStartTime);
-            //printf("Difference is: %09" PRIi64 " \n", timediff);
-            if (timediff > ONE_SEC_NS) {
-                break;
-            }
-        }
-        results[sec] = iterations;
-        iterations = 0;
-    }
-
-    float total = 0;
-    for (int sec = 0; sec < SEC_PER_TEST; sec++) {
-        printf("In second %d, ran %lu iterations.\n", sec, results[sec]);
-        total += (float) results[sec];
-    }
-    printf("Total operations in the test is: %f\n", total);
-    total = total / (float) SEC_PER_TEST;
-    printf("Average operations per second is: %f\n", total);
-
-    ret = EXIT_SUCCESS;
-
-work_cleanup:
-    // Free message buffer
-    if (NULL != msg_buf) {
-        free(msg_buf);
-    }
-
-    return ret;
-}
 
 int main(int argc, char const *argv[]) 
 { 
     // Socket state
     int sock_fd = -1;
     int new_sock_fd = -1;
-    struct sockaddr_un server_addr; 
-    int addrlen = sizeof(server_addr);
-    const char *uds_path;
+    struct sockaddr_un server_addr;
     
     // Other state
     int errnum = -1;
@@ -155,33 +43,33 @@ int main(int argc, char const *argv[])
         goto cleanup;    
     }
 
-    // Check second argument - the length of the messages to send
+    // Check third argument - the length of the messages to send
     msg_len = atoi(argv[ARG_MSG_LEN]);
     if (msg_len < 1 || msg_len > MAX_MSG_LEN) {
         printf("ERROR: invalid message length. Should be 0 < msg_len <= %d, not %d\n", MAX_MSG_LEN, msg_len);
+        printf("Usage: %s %s\n", argv[0], USAGE_STR);
         goto cleanup;
-    } 
-
-    // Third argument - the uds name.
-    uds_path = UDS_PATH;
+    }
 
     // Create socket
     if ((sock_fd = socket(AF_UNIX, SOCK_STREAM, 0)) == 0) { 
         perror("socket failed"); 
         goto cleanup;
-    } 
+    }
+    printf("Socket create!\n");
 
-    // Set up local address
-    server_addr.sun_family = AF_UNIX; 
-    strncpy(server_addr.sun_path, uds_path, 32);
+    // Prepare address
+    memset(&server_addr, 0, sizeof(server_addr));
+    server_addr.sun_family = AF_UNIX;
+    strncpy(server_addr.sun_path, UDS_PATH, sizeof(server_addr.sun_path) - 1);
 
-    if (is_server) {
-        // Bind the socket to the path
-        unlink(uds_path);
-        if (bind(sock_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) { 
+    if (is_server) {    
+        // Bind the socket to the ip/port
+        if (0 > bind(sock_fd, (const struct sockaddr *) &server_addr, sizeof(server_addr))) {
             perror("bind failed"); 
             goto cleanup;
         }
+        printf("Server bind!\n");
 
  	    // Listen for a connection
         if (listen(sock_fd, 1) < 0) { 
@@ -191,7 +79,7 @@ int main(int argc, char const *argv[])
         printf("Server listen!\n"); 
 
 	    // Accept the connection
-        if ((new_sock_fd = accept(sock_fd, (struct sockaddr *) &server_addr, (socklen_t*) &addrlen)) < 0) { 
+        if ((new_sock_fd = accept(sock_fd, NULL, NULL)) < 0) { 
             perror("accept"); 
             goto cleanup;
         }
@@ -203,7 +91,7 @@ int main(int argc, char const *argv[])
         }
     } else {
         // Connect to the server
-        if (0 > connect(sock_fd, (struct sockaddr *) &server_addr, sizeof(server_addr))) { 
+        if (0 > connect(sock_fd, (const struct sockaddr *) &server_addr, sizeof(server_addr))) { 
             errnum = errno;
             printf("Connect failed. errno=%d, err=%s\n", errnum, strerror(errnum));
             goto cleanup; 
@@ -225,6 +113,9 @@ cleanup:
     }
     if (new_sock_fd != -1) {
         close(new_sock_fd);
+    }
+    if (is_server) {
+        unlink(UDS_PATH);
     }
     return ret; 
 }
