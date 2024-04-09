@@ -24,7 +24,7 @@ int send_wrapper(int sock_fd, char *buf, int msg_len) {
     int send_ret = 0;
 
     while (bytes_sent != msg_len) {
-        if (0 >= (send_ret = send(sock_fd, buf, msg_len - bytes_sent, 0))) {
+        if (0 <= (send_ret = send(sock_fd, buf, msg_len - bytes_sent, 0))) {
             bytes_sent += send_ret;
             buf += send_ret;
         } else {
@@ -40,7 +40,7 @@ int recv_wrapper(int sock_fd, char *buf, int msg_len) {
     int recv_ret = 0;
 
     while (bytes_recv != msg_len) {
-        if (0 >= (recv_ret = recv(sock_fd, buf, msg_len - bytes_recv, MSG_WAITALL))) {
+        if (0 <= (recv_ret = recv(sock_fd, buf, msg_len - bytes_recv, MSG_WAITALL))) {
             bytes_recv += recv_ret;
             buf += recv_ret;
         } else {
@@ -62,6 +62,7 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
 
     // Initialize message buffer
     if (NULL == (msg_buf = malloc(msg_len))) {
+        perror("malloc failed\n");
         goto work_cleanup;
     }
 
@@ -73,17 +74,21 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
                 if (is_server) {
                     // Send then receive
                     if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
+                        printf("send_wrapper() failed\n");
                         goto work_cleanup;
                     }
                     if (EXIT_SUCCESS != recv_wrapper(sock_fd, msg_buf, msg_len)) {
+                        printf("recv_wrapper() failed\n");
                         goto work_cleanup;
                     }
                 } else {
                     // Receive then send
                     if (EXIT_SUCCESS != recv_wrapper(sock_fd, msg_buf, msg_len)) {
+                        printf("recv_wrapper() failed\n");
                         goto work_cleanup;
                     }
                     if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
+                        printf("send_wrapper() failed\n");
                         goto work_cleanup;
                     }
                 }
@@ -135,14 +140,13 @@ int main(int argc, char const *argv[])
     int ret = EXIT_FAILURE;     
     
     // Args
-    int num_threads = 1;
     int msg_len = 1;
     bool is_server = false;
  
     // Check number of arguments 
 	if (NUM_ARGS != argc) {
 		printf("ERROR: Wrong number of arguments\n");
-		printf(USAGE_STR);
+		printf("Usage: %s %s\n", argv[0], USAGE_STR);
 		goto cleanup;
 	}
 
@@ -153,21 +157,15 @@ int main(int argc, char const *argv[])
         is_server = true;
     } else {
         printf("ERROR: arg %d should be \"server\" or \"client\"\n", ARG_CLIENT_SERVER - 1);
-        printf(USAGE_STR);
+        printf("Usage: %s %s\n", argv[0], USAGE_STR);
         goto cleanup;    
     }
-
-    // Check second argument - number of threads to spawn
-    num_threads = atoi(argv[ARG_NUM_THREADS]);
-    if (num_threads < 1 || num_threads > MAX_NUM_THREADS) {
-        printf("ERROR: invalid number of threads. Should be 0 < num_threads <= %d, not %d\n", MAX_NUM_THREADS, num_threads);
-        goto cleanup;
-    } 
 
     // Check third argument - the length of the messages to send
     msg_len = atoi(argv[ARG_MSG_LEN]);
     if (msg_len < 1 || msg_len > MAX_MSG_LEN) {
         printf("ERROR: invalid message length. Should be 0 < msg_len <= %d, not %d\n", MAX_MSG_LEN, msg_len);
+        printf("Usage: %s %s\n", argv[0], USAGE_STR);
         goto cleanup;
     } 
 

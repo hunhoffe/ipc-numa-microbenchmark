@@ -10,7 +10,7 @@ setup:
 	mkdir -p ${BINDIR}
 
 loopbackprog :
-	$(CC) $(CFLAGS) -o ${BINDIR}/loopbackprog -Iloopback loopback/loopbackprog.c
+	$(CC) $(CFLAGS) -o ${BINDIR}/loopbackprog -Iloopback -I. loopback/loopbackprog.c
 
 .PHONY : clean
 clean :
