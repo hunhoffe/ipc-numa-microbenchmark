@@ -7,7 +7,6 @@
 #include <sys/socket.h> 
 #include <netinet/in.h> 
 #include <errno.h>
-#include <time.h>
 #include <inttypes.h>
 
 #include "loopbackprog.h"

@@ -1,6 +1,8 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
+#include <time.h>
+
 #define NUM_ARGS 3
 #define ARG_CLIENT_SERVER 1
 #define ARG_MSG_LEN 2
@@ -9,7 +11,7 @@
 
 #define ONE_SEC_NS 1000000000L
 #define SEC_PER_TEST 30
-#define OPS_PER_CHECK 64
+#define OPS_PER_CHECK 32
 
 // https://stackoverflow.com/questions/64893834/measuring-elapsed-time-usung-clock-gettimeclock-monotonic
 int64_t difftimespec_ns(const struct timespec after, const struct timespec before)
@@ -58,6 +60,7 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
     long num_ops = 0;
     int64_t timediff = 0;
     long results[SEC_PER_TEST] = { 0 };
+    printf("Do work with message length %d\n", msg_len);
 
     // Initialize message buffer
     if (NULL == (msg_buf = malloc(msg_len))) {
@@ -65,7 +68,7 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
         goto work_cleanup;
     }
 
-    for (int sec = 0; sec < SEC_PER_TEST; sec++) {
+    for (int sec = 0; (sec < SEC_PER_TEST && !is_server) || (sec < SEC_PER_TEST + 5 && is_server); sec++) {
         clock_gettime(CLOCK_MONOTONIC, &currentStartTime);
 
         while (true) {
@@ -74,10 +77,12 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
                     // Send then receive
                     if (EXIT_SUCCESS != send_wrapper(sock_fd, msg_buf, msg_len)) {
                         printf("send_wrapper() failed\n");
+                        ret = EXIT_SUCCESS; // client may have returned first
                         goto work_cleanup;
                     }
                     if (EXIT_SUCCESS != recv_wrapper(sock_fd, msg_buf, msg_len)) {
                         printf("recv_wrapper() failed\n");
+                        ret = EXIT_SUCCESS; // client may have returned first
                         goto work_cleanup;
                     }
                 } else {
@@ -105,18 +110,20 @@ int do_work(int sock_fd, int msg_len, bool is_server) {
         num_ops = 0;
     }
 
-    float total = 0;
-    for (int sec = 0; sec < SEC_PER_TEST; sec++) {
-        printf("In second %d, ran %lu operations.\n", sec, results[sec]);
-        total += (float) results[sec];
+    if (!is_server) {
+        float total = 0;
+        for (int sec = 0; sec < SEC_PER_TEST; sec++) {
+            printf("In second %d, ran %lu operations.\n", sec, results[sec]);
+            total += (float) results[sec];
+        }
+        printf("Total operations in the test is: %f\n", total);
+        total = total / (float) SEC_PER_TEST;
+        printf("Average operations per second is: %f\n", total);
     }
-    printf("Total operations in the test is: %f\n", total);
-    total = total / (float) SEC_PER_TEST;
-    printf("Average operations per second is: %f\n", total);
-
     ret = EXIT_SUCCESS;
 
 work_cleanup:
+
     // Free message buffer
     if (NULL != msg_buf) {
         free(msg_buf);
