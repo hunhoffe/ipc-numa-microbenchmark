@@ -39,11 +39,7 @@ run_tests() {
         sleep 0.1
         $client_prefix $bin client $msg_size >> $client_log_file
         wait $server_pid # put server to foreground to make sure it terminates before we begin again
-
     done
-
-    # kill any zombies
-    pkill $binname
 }
 
 if [ "$#" -ne 1 ]; then
