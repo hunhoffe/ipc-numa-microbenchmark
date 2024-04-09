@@ -1,0 +1,407 @@
+==== iteration 0
+Socket create!
+Client connect!
+Do work with message length 4096
+In second 0, ran 46208 operations.
+In second 1, ran 74848 operations.
+In second 2, ran 82080 operations.
+In second 3, ran 94368 operations.
+In second 4, ran 67200 operations.
+In second 5, ran 65024 operations.
+In second 6, ran 63744 operations.
+In second 7, ran 74720 operations.
+In second 8, ran 84608 operations.
+In second 9, ran 94720 operations.
+In second 10, ran 99808 operations.
+In second 11, ran 87584 operations.
+In second 12, ran 81472 operations.
+In second 13, ran 87744 operations.
+In second 14, ran 95776 operations.
+In second 15, ran 100704 operations.
+In second 16, ran 100736 operations.
+In second 17, ran 86688 operations.
+In second 18, ran 81152 operations.
+In second 19, ran 81984 operations.
+In second 20, ran 82112 operations.
+In second 21, ran 84064 operations.
+In second 22, ran 79296 operations.
+In second 23, ran 85824 operations.
+In second 24, ran 81440 operations.
+In second 25, ran 80448 operations.
+In second 26, ran 87552 operations.
+In second 27, ran 95776 operations.
+In second 28, ran 100544 operations.
+In second 29, ran 85280 operations.
+Total operations in the test is: 2513504.000000
+Average operations per second is: 83783.468750
+Exited successfully!
+==== iteration 1
+Socket create!
+Client connect!
+Do work with message length 4096
+In second 0, ran 46560 operations.
+In second 1, ran 75200 operations.
+In second 2, ran 82336 operations.
+In second 3, ran 98784 operations.
+In second 4, ran 93664 operations.
+In second 5, ran 59072 operations.
+In second 6, ran 69440 operations.
+In second 7, ran 80928 operations.
+In second 8, ran 73152 operations.
+In second 9, ran 85440 operations.
+In second 10, ran 89312 operations.
+In second 11, ran 98400 operations.
+In second 12, ran 87776 operations.
+In second 13, ran 80576 operations.
+In second 14, ran 87520 operations.
+In second 15, ran 80864 operations.
+In second 16, ran 66880 operations.
+In second 17, ran 69152 operations.
+In second 18, ran 80256 operations.
+In second 19, ran 94624 operations.
+In second 20, ran 99744 operations.
+In second 21, ran 100000 operations.
+In second 22, ran 99936 operations.
+In second 23, ran 100128 operations.
+In second 24, ran 100096 operations.
+In second 25, ran 89984 operations.
+In second 26, ran 80672 operations.
+In second 27, ran 87264 operations.
+In second 28, ran 95776 operations.
+In second 29, ran 100544 operations.
+Total operations in the test is: 2554080.000000
+Average operations per second is: 85136.000000
+Exited successfully!
+==== iteration 2
+Socket create!
+Client connect!
+Do work with message length 4096
+In second 0, ran 45024 operations.
+In second 1, ran 58912 operations.
+In second 2, ran 75744 operations.
+In second 3, ran 71584 operations.
+In second 4, ran 65312 operations.
+In second 5, ran 71008 operations.
+In second 6, ran 77568 operations.
+In second 7, ran 57312 operations.
+In second 8, ran 69344 operations.
+In second 9, ran 86016 operations.
+In second 10, ran 91296 operations.
+In second 11, ran 78080 operations.
+In second 12, ran 62560 operations.
+In second 13, ran 55616 operations.
+In second 14, ran 72032 operations.
+In second 15, ran 85920 operations.
+In second 16, ran 96064 operations.
+In second 17, ran 100960 operations.
+In second 18, ran 100992 operations.
+In second 19, ran 100960 operations.
+In second 20, ran 100960 operations.
+In second 21, ran 101024 operations.
+In second 22, ran 101024 operations.
+In second 23, ran 100992 operations.
+In second 24, ran 87360 operations.
+In second 25, ran 83712 operations.
+In second 26, ran 88096 operations.
+In second 27, ran 90560 operations.
+In second 28, ran 76032 operations.
+In second 29, ran 87808 operations.
+Total operations in the test is: 2439872.000000
+Average operations per second is: 81329.070312
+Exited successfully!
+==== iteration 3
+Socket create!
+Client connect!
+Do work with message length 4096
+In second 0, ran 47648 operations.
+In second 1, ran 75840 operations.
+In second 2, ran 83008 operations.
+In second 3, ran 85280 operations.
+In second 4, ran 81568 operations.
+In second 5, ran 88352 operations.
+In second 6, ran 96064 operations.
+In second 7, ran 101408 operations.
+In second 8, ran 84160 operations.
+In second 9, ran 73568 operations.
+In second 10, ran 53632 operations.
+In second 11, ran 67520 operations.
+In second 12, ran 62368 operations.
+In second 13, ran 76384 operations.
+In second 14, ran 81920 operations.
+In second 15, ran 74304 operations.
+In second 16, ran 64352 operations.
+In second 17, ran 80512 operations.
+In second 18, ran 73888 operations.
+In second 19, ran 72928 operations.
+In second 20, ran 64224 operations.
+In second 21, ran 57152 operations.
+In second 22, ran 55072 operations.
+In second 23, ran 62752 operations.
+In second 24, ran 74560 operations.
+In second 25, ran 60640 operations.
+In second 26, ran 76480 operations.
+In second 27, ran 88480 operations.
+In second 28, ran 99616 operations.
+In second 29, ran 88416 operations.
+Total operations in the test is: 2252096.000000
+Average operations per second is: 75069.867188
+Exited successfully!
+==== iteration 4
+Socket create!
+Client connect!
+Do work with message length 4096
+In second 0, ran 46624 operations.
+In second 1, ran 75200 operations.
+In second 2, ran 82208 operations.
+In second 3, ran 98560 operations.
+In second 4, ran 100192 operations.
+In second 5, ran 100288 operations.
+In second 6, ran 100064 operations.
+In second 7, ran 100320 operations.
+In second 8, ran 100096 operations.
+In second 9, ran 100192 operations.
+In second 10, ran 90272 operations.
+In second 11, ran 82912 operations.
+In second 12, ran 88576 operations.
+In second 13, ran 95424 operations.
+In second 14, ran 89920 operations.
+In second 15, ran 81664 operations.
+In second 16, ran 83264 operations.
+In second 17, ran 73120 operations.
+In second 18, ran 87360 operations.
+In second 19, ran 90304 operations.
+In second 20, ran 99424 operations.
+In second 21, ran 100416 operations.
+In second 22, ran 100544 operations.
+In second 23, ran 100608 operations.
+In second 24, ran 99200 operations.
+In second 25, ran 76864 operations.
+In second 26, ran 82208 operations.
+In second 27, ran 57152 operations.
+In second 28, ran 63968 operations.
+In second 29, ran 76224 operations.
+Total operations in the test is: 2623168.000000
+Average operations per second is: 87438.929688
+Exited successfully!
+==== iteration 5
+Socket create!
+Client connect!
+Do work with message length 4096
+In second 0, ran 47296 operations.
+In second 1, ran 76064 operations.
+In second 2, ran 82912 operations.
+In second 3, ran 87232 operations.
+In second 4, ran 83296 operations.
+In second 5, ran 88544 operations.
+In second 6, ran 96032 operations.
+In second 7, ran 100352 operations.
+In second 8, ran 100480 operations.
+In second 9, ran 88928 operations.
+In second 10, ran 78112 operations.
+In second 11, ran 88032 operations.
+In second 12, ran 95616 operations.
+In second 13, ran 100032 operations.
+In second 14, ran 100160 operations.
+In second 15, ran 89184 operations.
+In second 16, ran 82336 operations.
+In second 17, ran 88640 operations.
+In second 18, ran 96352 operations.
+In second 19, ran 96288 operations.
+In second 20, ran 76096 operations.
+In second 21, ran 87904 operations.
+In second 22, ran 90752 operations.
+In second 23, ran 89184 operations.
+In second 24, ran 82944 operations.
+In second 25, ran 87072 operations.
+In second 26, ran 77408 operations.
+In second 27, ran 88064 operations.
+In second 28, ran 82272 operations.
+In second 29, ran 80960 operations.
+Total operations in the test is: 2608544.000000
+Average operations per second is: 86951.468750
+Exited successfully!
+==== iteration 6
+Socket create!
+Client connect!
+Do work with message length 4096
+In second 0, ran 47488 operations.
+In second 1, ran 76256 operations.
+In second 2, ran 83200 operations.
+In second 3, ran 99200 operations.
+In second 4, ran 89664 operations.
+In second 5, ran 53920 operations.
+In second 6, ran 75744 operations.
+In second 7, ran 86528 operations.
+In second 8, ran 98848 operations.
+In second 9, ran 100128 operations.
+In second 10, ran 78400 operations.
+In second 11, ran 87904 operations.
+In second 12, ran 91200 operations.
+In second 13, ran 99392 operations.
+In second 14, ran 100416 operations.
+In second 15, ran 91424 operations.
+In second 16, ran 78176 operations.
+In second 17, ran 57408 operations.
+In second 18, ran 55520 operations.
+In second 19, ran 76800 operations.
+In second 20, ran 88576 operations.
+In second 21, ran 99776 operations.
+In second 22, ran 100736 operations.
+In second 23, ran 87136 operations.
+In second 24, ran 61056 operations.
+In second 25, ran 72224 operations.
+In second 26, ran 79744 operations.
+In second 27, ran 92224 operations.
+In second 28, ran 75776 operations.
+In second 29, ran 61568 operations.
+Total operations in the test is: 2446432.000000
+Average operations per second is: 81547.734375
+Exited successfully!
+==== iteration 7
+Socket create!
+Client connect!
+Do work with message length 4096
+In second 0, ran 47680 operations.
+In second 1, ran 75360 operations.
+In second 2, ran 60896 operations.
+In second 3, ran 66336 operations.
+In second 4, ran 77376 operations.
+In second 5, ran 93824 operations.
+In second 6, ran 69280 operations.
+In second 7, ran 56544 operations.
+In second 8, ran 76800 operations.
+In second 9, ran 83008 operations.
+In second 10, ran 98784 operations.
+In second 11, ran 98528 operations.
+In second 12, ran 77152 operations.
+In second 13, ran 87904 operations.
+In second 14, ran 91264 operations.
+In second 15, ran 100096 operations.
+In second 16, ran 100832 operations.
+In second 17, ran 100736 operations.
+In second 18, ran 100800 operations.
+In second 19, ran 99328 operations.
+In second 20, ran 70592 operations.
+In second 21, ran 49088 operations.
+In second 22, ran 66848 operations.
+In second 23, ran 68000 operations.
+In second 24, ran 80832 operations.
+In second 25, ran 91008 operations.
+In second 26, ran 90912 operations.
+In second 27, ran 66848 operations.
+In second 28, ran 76672 operations.
+In second 29, ran 88800 operations.
+Total operations in the test is: 2412128.000000
+Average operations per second is: 80404.265625
+Exited successfully!
+==== iteration 8
+Socket create!
+Client connect!
+Do work with message length 4096
+In second 0, ran 47744 operations.
+In second 1, ran 76512 operations.
+In second 2, ran 83072 operations.
+In second 3, ran 79808 operations.
+In second 4, ran 52288 operations.
+In second 5, ran 69856 operations.
+In second 6, ran 80256 operations.
+In second 7, ran 94688 operations.
+In second 8, ran 81728 operations.
+In second 9, ran 58464 operations.
+In second 10, ran 77248 operations.
+In second 11, ran 83104 operations.
+In second 12, ran 99072 operations.
+In second 13, ran 91872 operations.
+In second 14, ran 74784 operations.
+In second 15, ran 60736 operations.
+In second 16, ran 60960 operations.
+In second 17, ran 77056 operations.
+In second 18, ran 88416 operations.
+In second 19, ran 99616 operations.
+In second 20, ran 100544 operations.
+In second 21, ran 100576 operations.
+In second 22, ran 77888 operations.
+In second 23, ran 88320 operations.
+In second 24, ran 91936 operations.
+In second 25, ran 88832 operations.
+In second 26, ran 50816 operations.
+In second 27, ran 76544 operations.
+In second 28, ran 83456 operations.
+In second 29, ran 79552 operations.
+Total operations in the test is: 2375744.000000
+Average operations per second is: 79191.468750
+Exited successfully!
+==== iteration 9
+Socket create!
+Client connect!
+Do work with message length 4096
+In second 0, ran 48096 operations.
+In second 1, ran 76960 operations.
+In second 2, ran 83680 operations.
+In second 3, ran 99744 operations.
+In second 4, ran 53792 operations.
+In second 5, ran 71680 operations.
+In second 6, ran 77792 operations.
+In second 7, ran 90304 operations.
+In second 8, ran 87104 operations.
+In second 9, ran 88320 operations.
+In second 10, ran 96704 operations.
+In second 11, ran 95744 operations.
+In second 12, ran 76992 operations.
+In second 13, ran 88224 operations.
+In second 14, ran 91360 operations.
+In second 15, ran 99808 operations.
+In second 16, ran 78560 operations.
+In second 17, ran 57344 operations.
+In second 18, ran 77120 operations.
+In second 19, ran 83584 operations.
+In second 20, ran 89760 operations.
+In second 21, ran 52288 operations.
+In second 22, ran 66528 operations.
+In second 23, ran 60896 operations.
+In second 24, ran 77344 operations.
+In second 25, ran 88640 operations.
+In second 26, ran 80128 operations.
+In second 27, ran 87968 operations.
+In second 28, ran 91072 operations.
+In second 29, ran 99392 operations.
+Total operations in the test is: 2416928.000000
+Average operations per second is: 80564.265625
+Exited successfully!
+==== iteration 10
+Socket create!
+Client connect!
+Do work with message length 4096
+In second 0, ran 48704 operations.
+In second 1, ran 76384 operations.
+In second 2, ran 83200 operations.
+In second 3, ran 99104 operations.
+In second 4, ran 100128 operations.
+In second 5, ran 100192 operations.
+In second 6, ran 96416 operations.
+In second 7, ran 50880 operations.
+In second 8, ran 70496 operations.
+In second 9, ran 65952 operations.
+In second 10, ran 86400 operations.
+In second 11, ran 90688 operations.
+In second 12, ran 99712 operations.
+In second 13, ran 96800 operations.
+In second 14, ran 76960 operations.
+In second 15, ran 61184 operations.
+In second 16, ran 56256 operations.
+In second 17, ran 62496 operations.
+In second 18, ran 71232 operations.
+In second 19, ran 80864 operations.
+In second 20, ran 95712 operations.
+In second 21, ran 76448 operations.
+In second 22, ran 87872 operations.
+In second 23, ran 90688 operations.
+In second 24, ran 99872 operations.
+In second 25, ran 76608 operations.
+In second 26, ran 85088 operations.
+In second 27, ran 87840 operations.
+In second 28, ran 95936 operations.
+In second 29, ran 99968 operations.
+Total operations in the test is: 2470080.000000
+Average operations per second is: 82336.000000
+Exited successfully!

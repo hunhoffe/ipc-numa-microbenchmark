@@ -1,0 +1,66 @@
+==== iteration 0
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 1
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 2
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 3
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 4
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 5
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 6
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 7
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 8
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 9
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 10
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!

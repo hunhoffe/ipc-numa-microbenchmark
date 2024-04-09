@@ -1,0 +1,396 @@
+==== iteration 0
+Client connect!
+Do work with message length 4096
+In second 0, ran 34176 operations.
+In second 1, ran 38880 operations.
+In second 2, ran 52608 operations.
+In second 3, ran 54272 operations.
+In second 4, ran 49280 operations.
+In second 5, ran 57920 operations.
+In second 6, ran 45856 operations.
+In second 7, ran 43328 operations.
+In second 8, ran 41792 operations.
+In second 9, ran 40960 operations.
+In second 10, ran 50624 operations.
+In second 11, ran 46752 operations.
+In second 12, ran 44352 operations.
+In second 13, ran 39424 operations.
+In second 14, ran 50368 operations.
+In second 15, ran 46720 operations.
+In second 16, ran 36896 operations.
+In second 17, ran 39968 operations.
+In second 18, ran 41760 operations.
+In second 19, ran 51392 operations.
+In second 20, ran 51680 operations.
+In second 21, ran 57376 operations.
+In second 22, ran 41536 operations.
+In second 23, ran 40576 operations.
+In second 24, ran 35744 operations.
+In second 25, ran 38688 operations.
+In second 26, ran 36960 operations.
+In second 27, ran 37664 operations.
+In second 28, ran 36064 operations.
+In second 29, ran 34592 operations.
+Total operations in the test is: 1318208.000000
+Average operations per second is: 43940.265625
+Exited successfully!
+==== iteration 1
+Client connect!
+Do work with message length 4096
+In second 0, ran 33504 operations.
+In second 1, ran 42336 operations.
+In second 2, ran 51968 operations.
+In second 3, ran 43808 operations.
+In second 4, ran 42368 operations.
+In second 5, ran 46752 operations.
+In second 6, ran 48896 operations.
+In second 7, ran 55968 operations.
+In second 8, ran 57024 operations.
+In second 9, ran 51552 operations.
+In second 10, ran 40288 operations.
+In second 11, ran 47616 operations.
+In second 12, ran 57120 operations.
+In second 13, ran 42688 operations.
+In second 14, ran 35872 operations.
+In second 15, ran 42496 operations.
+In second 16, ran 44480 operations.
+In second 17, ran 42560 operations.
+In second 18, ran 36288 operations.
+In second 19, ran 39072 operations.
+In second 20, ran 40928 operations.
+In second 21, ran 46016 operations.
+In second 22, ran 46176 operations.
+In second 23, ran 55872 operations.
+In second 24, ran 58560 operations.
+In second 25, ran 46688 operations.
+In second 26, ran 36256 operations.
+In second 27, ran 36608 operations.
+In second 28, ran 40224 operations.
+In second 29, ran 47744 operations.
+Total operations in the test is: 1357728.000000
+Average operations per second is: 45257.601562
+Exited successfully!
+==== iteration 2
+Client connect!
+Do work with message length 4096
+In second 0, ran 35552 operations.
+In second 1, ran 40160 operations.
+In second 2, ran 54656 operations.
+In second 3, ran 54624 operations.
+In second 4, ran 45088 operations.
+In second 5, ran 46112 operations.
+In second 6, ran 56832 operations.
+In second 7, ran 59040 operations.
+In second 8, ran 39936 operations.
+In second 9, ran 46304 operations.
+In second 10, ran 59168 operations.
+In second 11, ran 60544 operations.
+In second 12, ran 48672 operations.
+In second 13, ran 39328 operations.
+In second 14, ran 54112 operations.
+In second 15, ran 60032 operations.
+In second 16, ran 47584 operations.
+In second 17, ran 57888 operations.
+In second 18, ran 60192 operations.
+In second 19, ran 58912 operations.
+In second 20, ran 44064 operations.
+In second 21, ran 45664 operations.
+In second 22, ran 53280 operations.
+In second 23, ran 46176 operations.
+In second 24, ran 46944 operations.
+In second 25, ran 59456 operations.
+In second 26, ran 60224 operations.
+In second 27, ran 60384 operations.
+In second 28, ran 60544 operations.
+In second 29, ran 51296 operations.
+Total operations in the test is: 1552768.000000
+Average operations per second is: 51758.933594
+Exited successfully!
+==== iteration 3
+Client connect!
+Do work with message length 4096
+In second 0, ran 34112 operations.
+In second 1, ran 40192 operations.
+In second 2, ran 48256 operations.
+In second 3, ran 58496 operations.
+In second 4, ran 47840 operations.
+In second 5, ran 47744 operations.
+In second 6, ran 35936 operations.
+In second 7, ran 43104 operations.
+In second 8, ran 48672 operations.
+In second 9, ran 50240 operations.
+In second 10, ran 47872 operations.
+In second 11, ran 57792 operations.
+In second 12, ran 45504 operations.
+In second 13, ran 40608 operations.
+In second 14, ran 41632 operations.
+In second 15, ran 50496 operations.
+In second 16, ran 45600 operations.
+In second 17, ran 40192 operations.
+In second 18, ran 53568 operations.
+In second 19, ran 58496 operations.
+In second 20, ran 41056 operations.
+In second 21, ran 45888 operations.
+In second 22, ran 58144 operations.
+In second 23, ran 58880 operations.
+In second 24, ran 45920 operations.
+In second 25, ran 52672 operations.
+In second 26, ran 46432 operations.
+In second 27, ran 58176 operations.
+In second 28, ran 58880 operations.
+In second 29, ran 47744 operations.
+Total operations in the test is: 1450144.000000
+Average operations per second is: 48338.132812
+Exited successfully!
+==== iteration 4
+Client connect!
+Do work with message length 4096
+In second 0, ran 35104 operations.
+In second 1, ran 46848 operations.
+In second 2, ran 58304 operations.
+In second 3, ran 46432 operations.
+In second 4, ran 46016 operations.
+In second 5, ran 51296 operations.
+In second 6, ran 46848 operations.
+In second 7, ran 43648 operations.
+In second 8, ran 44544 operations.
+In second 9, ran 57664 operations.
+In second 10, ran 59328 operations.
+In second 11, ran 46944 operations.
+In second 12, ran 43264 operations.
+In second 13, ran 52128 operations.
+In second 14, ran 48512 operations.
+In second 15, ran 40896 operations.
+In second 16, ran 48864 operations.
+In second 17, ran 48352 operations.
+In second 18, ran 39712 operations.
+In second 19, ran 48320 operations.
+In second 20, ran 52288 operations.
+In second 21, ran 48512 operations.
+In second 22, ran 54304 operations.
+In second 23, ran 44608 operations.
+In second 24, ran 56992 operations.
+In second 25, ran 59424 operations.
+In second 26, ran 59648 operations.
+In second 27, ran 47584 operations.
+In second 28, ran 41856 operations.
+In second 29, ran 49952 operations.
+Total operations in the test is: 1468192.000000
+Average operations per second is: 48939.734375
+Exited successfully!
+==== iteration 5
+Client connect!
+Do work with message length 4096
+In second 0, ran 33984 operations.
+In second 1, ran 38976 operations.
+In second 2, ran 41952 operations.
+In second 3, ran 35328 operations.
+In second 4, ran 37664 operations.
+In second 5, ran 52256 operations.
+In second 6, ran 46240 operations.
+In second 7, ran 39136 operations.
+In second 8, ran 52640 operations.
+In second 9, ran 58912 operations.
+In second 10, ran 51520 operations.
+In second 11, ran 39072 operations.
+In second 12, ran 54016 operations.
+In second 13, ran 44448 operations.
+In second 14, ran 51168 operations.
+In second 15, ran 45312 operations.
+In second 16, ran 41824 operations.
+In second 17, ran 55552 operations.
+In second 18, ran 48352 operations.
+In second 19, ran 41728 operations.
+In second 20, ran 49920 operations.
+In second 21, ran 52896 operations.
+In second 22, ran 34016 operations.
+In second 23, ran 41984 operations.
+In second 24, ran 54560 operations.
+In second 25, ran 45984 operations.
+In second 26, ran 56704 operations.
+In second 27, ran 58528 operations.
+In second 28, ran 58560 operations.
+In second 29, ran 44480 operations.
+Total operations in the test is: 1407712.000000
+Average operations per second is: 46923.734375
+Exited successfully!
+==== iteration 6
+Client connect!
+Do work with message length 4096
+In second 0, ran 34816 operations.
+In second 1, ran 39488 operations.
+In second 2, ran 47360 operations.
+In second 3, ran 45952 operations.
+In second 4, ran 57312 operations.
+In second 5, ran 44448 operations.
+In second 6, ran 50880 operations.
+In second 7, ran 58016 operations.
+In second 8, ran 55968 operations.
+In second 9, ran 45632 operations.
+In second 10, ran 45408 operations.
+In second 11, ran 44256 operations.
+In second 12, ran 51360 operations.
+In second 13, ran 58144 operations.
+In second 14, ran 45152 operations.
+In second 15, ran 52000 operations.
+In second 16, ran 48192 operations.
+In second 17, ran 42432 operations.
+In second 18, ran 41472 operations.
+In second 19, ran 51200 operations.
+In second 20, ran 52416 operations.
+In second 21, ran 37248 operations.
+In second 22, ran 34208 operations.
+In second 23, ran 37440 operations.
+In second 24, ran 34656 operations.
+In second 25, ran 37504 operations.
+In second 26, ran 33728 operations.
+In second 27, ran 37024 operations.
+In second 28, ran 36256 operations.
+In second 29, ran 38368 operations.
+Total operations in the test is: 1338336.000000
+Average operations per second is: 44611.199219
+Exited successfully!
+==== iteration 7
+Client connect!
+Do work with message length 4096
+In second 0, ran 33312 operations.
+In second 1, ran 35968 operations.
+In second 2, ran 43808 operations.
+In second 3, ran 48512 operations.
+In second 4, ran 42624 operations.
+In second 5, ran 52544 operations.
+In second 6, ran 58912 operations.
+In second 7, ran 49312 operations.
+In second 8, ran 52992 operations.
+In second 9, ran 58624 operations.
+In second 10, ran 51520 operations.
+In second 11, ran 43328 operations.
+In second 12, ran 49760 operations.
+In second 13, ran 58912 operations.
+In second 14, ran 59296 operations.
+In second 15, ran 49728 operations.
+In second 16, ran 53024 operations.
+In second 17, ran 48192 operations.
+In second 18, ran 42144 operations.
+In second 19, ran 53920 operations.
+In second 20, ran 59456 operations.
+In second 21, ran 46944 operations.
+In second 22, ran 52992 operations.
+In second 23, ran 49664 operations.
+In second 24, ran 42368 operations.
+In second 25, ran 38944 operations.
+In second 26, ran 36288 operations.
+In second 27, ran 35744 operations.
+In second 28, ran 35616 operations.
+In second 29, ran 40128 operations.
+Total operations in the test is: 1424576.000000
+Average operations per second is: 47485.867188
+Exited successfully!
+==== iteration 8
+Client connect!
+Do work with message length 4096
+In second 0, ran 35904 operations.
+In second 1, ran 48512 operations.
+In second 2, ran 50528 operations.
+In second 3, ran 39936 operations.
+In second 4, ran 50688 operations.
+In second 5, ran 37216 operations.
+In second 6, ran 34880 operations.
+In second 7, ran 39584 operations.
+In second 8, ran 54336 operations.
+In second 9, ran 59008 operations.
+In second 10, ran 50528 operations.
+In second 11, ran 35520 operations.
+In second 12, ran 40736 operations.
+In second 13, ran 55232 operations.
+In second 14, ran 45312 operations.
+In second 15, ran 36928 operations.
+In second 16, ran 37504 operations.
+In second 17, ran 43296 operations.
+In second 18, ran 40928 operations.
+In second 19, ran 40736 operations.
+In second 20, ran 41824 operations.
+In second 21, ran 48544 operations.
+In second 22, ran 49664 operations.
+In second 23, ran 42528 operations.
+In second 24, ran 38528 operations.
+In second 25, ran 37568 operations.
+In second 26, ran 37952 operations.
+In second 27, ran 48992 operations.
+In second 28, ran 58880 operations.
+In second 29, ran 59776 operations.
+Total operations in the test is: 1341568.000000
+Average operations per second is: 44718.933594
+Exited successfully!
+==== iteration 9
+Client connect!
+Do work with message length 4096
+In second 0, ran 34624 operations.
+In second 1, ran 42272 operations.
+In second 2, ran 56288 operations.
+In second 3, ran 58688 operations.
+In second 4, ran 44960 operations.
+In second 5, ran 57888 operations.
+In second 6, ran 52128 operations.
+In second 7, ran 58592 operations.
+In second 8, ran 59040 operations.
+In second 9, ran 58944 operations.
+In second 10, ran 44960 operations.
+In second 11, ran 57536 operations.
+In second 12, ran 59168 operations.
+In second 13, ran 45344 operations.
+In second 14, ran 51936 operations.
+In second 15, ran 58464 operations.
+In second 16, ran 46944 operations.
+In second 17, ran 42336 operations.
+In second 18, ran 52064 operations.
+In second 19, ran 58624 operations.
+In second 20, ran 58656 operations.
+In second 21, ran 58688 operations.
+In second 22, ran 58528 operations.
+In second 23, ran 46048 operations.
+In second 24, ran 52096 operations.
+In second 25, ran 59040 operations.
+In second 26, ran 38592 operations.
+In second 27, ran 41024 operations.
+In second 28, ran 55872 operations.
+In second 29, ran 58944 operations.
+Total operations in the test is: 1568288.000000
+Average operations per second is: 52276.265625
+Exited successfully!
+==== iteration 10
+Client connect!
+Do work with message length 4096
+In second 0, ran 34976 operations.
+In second 1, ran 36992 operations.
+In second 2, ran 38176 operations.
+In second 3, ran 38880 operations.
+In second 4, ran 37984 operations.
+In second 5, ran 39200 operations.
+In second 6, ran 45952 operations.
+In second 7, ran 51904 operations.
+In second 8, ran 58848 operations.
+In second 9, ran 48896 operations.
+In second 10, ran 47360 operations.
+In second 11, ran 44608 operations.
+In second 12, ran 57440 operations.
+In second 13, ran 47840 operations.
+In second 14, ran 55968 operations.
+In second 15, ran 49120 operations.
+In second 16, ran 51904 operations.
+In second 17, ran 53120 operations.
+In second 18, ran 38528 operations.
+In second 19, ran 45632 operations.
+In second 20, ran 51776 operations.
+In second 21, ran 43968 operations.
+In second 22, ran 42336 operations.
+In second 23, ran 56928 operations.
+In second 24, ran 58240 operations.
+In second 25, ran 58144 operations.
+In second 26, ran 58112 operations.
+In second 27, ran 58112 operations.
+In second 28, ran 45344 operations.
+In second 29, ran 52416 operations.
+Total operations in the test is: 1448704.000000
+Average operations per second is: 48290.132812
+Exited successfully!

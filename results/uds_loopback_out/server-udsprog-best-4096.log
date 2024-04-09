@@ -1,0 +1,88 @@
+==== iteration 0
+Socket create!
+Server bind!
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 1
+Socket create!
+Server bind!
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 2
+Socket create!
+Server bind!
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 3
+Socket create!
+Server bind!
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 4
+Socket create!
+Server bind!
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 5
+Socket create!
+Server bind!
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 6
+Socket create!
+Server bind!
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 7
+Socket create!
+Server bind!
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 8
+Socket create!
+Server bind!
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 9
+Socket create!
+Server bind!
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
+==== iteration 10
+Socket create!
+Server bind!
+Server listen!
+Server accept!
+Do work with message length 4096
+recv_wrapper() failed
+Exited successfully!
