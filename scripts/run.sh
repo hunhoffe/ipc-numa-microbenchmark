@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 ITERATIONS=10
 BASELINE_PREFIX=" "
 NUMA_0_PREFIX="numactl --cpunodebind=0 --membind=0"
@@ -14,23 +16,30 @@ run_tests() {
     bin=$1
     binname=$(basename $bin)
     test_type=$2
-    iters=$4
+    iters=$(($4))
     msg_size=$5
-    log_file=$3/$binname-$test_type-$msg_size.log
+    client_log_file=$3/client-$binname-$test_type-$msg_size.log
+    server_log_file=$3/server-$binname-$test_type-$msg_size.log
     server_prefix=$6
     client_prefix=$7
-    echo "run_test() - log_file=$log_file server_prefix=$server_prefix client_prefix=$client_prefix"
+    echo "run_test() - client_log_file=$client_log_file server_log_file=$server_log_file server_prefix=$server_prefix client_prefix=$client_prefix"
 
-    # Create the log file
-    touch $log_file
+    # Create the log files
+    touch $client_log_file
+    touch $server_log_file
 
     # Run the test for $iters iterations and pipe output to the log file
     for (( i = 0; i <= $iters; i++ )) 
     do 
         echo "     iteration $i"
-        echo "==== iteration $i" >> $log_file
-        $server_prefix $bin server $msg_size &
-        $client_prefix $bin client $msg_size >> $log_file
+        echo "==== iteration $i" >> $client_log_file
+        echo "==== iteration $i" >> $server_log_file
+        $server_prefix $bin server $msg_size >> $server_log_file &
+        server_pid=$!
+        sleep 0.1
+        $client_prefix $bin client $msg_size >> $client_log_file
+        wait $server_pid # put server to foreground to make sure it terminates before we begin again
+
     done
 
     # kill any zombies
@@ -56,7 +65,7 @@ for file in $BINDIR/*; do
         run_tests $file "base" $LOGDIR $ITERATIONS $MSG_SIZE "$BASELINE_PREFIX" "$BASELINE_PREFIX"
         run_tests $file "best" $LOGDIR $ITERATIONS $MSG_SIZE "$NUMA_0_PREFIX" "$NUMA_0_PREFIX"
         run_tests $file "worst" $LOGDIR $ITERATIONS $MSG_SIZE "$NUMA_0_PREFIX" "$NUMA_1_PREFIX"
-    fi 
+    fi
 done
 
 
