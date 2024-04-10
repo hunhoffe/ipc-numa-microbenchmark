@@ -22,6 +22,7 @@ int main(int argc, char const *argv[])
     
     // Args
     int msg_len = 1;
+    int pair_num = 0;
     bool is_server = false;
  
     // Check number of arguments 
@@ -42,13 +43,32 @@ int main(int argc, char const *argv[])
         goto cleanup;    
     }
 
-    // Check third argument - the length of the messages to send
+    // Check second argument - the length of the messages to send
     msg_len = atoi(argv[ARG_MSG_LEN]);
     if (msg_len < 1 || msg_len > MAX_MSG_LEN) {
         printf("ERROR: invalid message length. Should be 0 < msg_len <= %d, not %d\n", MAX_MSG_LEN, msg_len);
         printf("Usage: %s %s\n", argv[0], USAGE_STR);
         goto cleanup;
     }
+
+    // Check third argument - an id unique to this client/server pair
+    pair_num = atoi(argv[ARG_PAIR_NUM]);
+    if (pair_num < 0 || pair_num > MAX_PAIR_NUM) {
+        printf("ERROR: invalid pair number. Should be 0 <= pair_num <= %d, not %d\n", MAX_PAIR_NUM, pair_num);
+        printf("Usage: %s %s\n", argv[0], USAGE_STR);
+        goto cleanup;
+    }
+
+    int path_len = strlen(UDS_PATH) + strlen(argv[ARG_PAIR_NUM]);
+    if (path_len >= UDS_PATH_MAX_LEN - 1) {
+        printf("ERROR: UDS path is too long! Should only be %d characters for strlen(%s + %s)", UDS_PATH_MAX_LEN, UDS_PATH, argv[ARG_PAIR_NUM]);
+    }
+
+    // Construct uds file path from base path and pair num
+    char my_path[UDS_PATH_MAX_LEN] = { '\0' };
+    strncpy((char *)my_path, UDS_PATH, UDS_PATH_MAX_LEN);
+    strncpy((char *)&(my_path[strnlen(UDS_PATH, UDS_PATH_MAX_LEN - 1)]), argv[ARG_PAIR_NUM], UDS_PATH_MAX_LEN - strlen(UDS_PATH));
+    printf("UDS socket path is: %s\n", my_path);
 
     // Create socket
     if ((sock_fd = socket(AF_UNIX, SOCK_STREAM, 0)) == 0) { 
@@ -60,7 +80,7 @@ int main(int argc, char const *argv[])
     // Prepare address
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sun_family = AF_UNIX;
-    strncpy(server_addr.sun_path, UDS_PATH, sizeof(server_addr.sun_path) - 1);
+    strncpy(server_addr.sun_path, my_path, sizeof(server_addr.sun_path) - 1);
 
     if (is_server) {    
         // Bind the socket to the ip/port
@@ -114,7 +134,7 @@ cleanup:
         close(new_sock_fd);
     }
     if (is_server) {
-        unlink(UDS_PATH);
+        unlink(my_path);
     }
     return ret; 
 }

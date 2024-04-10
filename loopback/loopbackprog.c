@@ -26,6 +26,7 @@ int main(int argc, char const *argv[])
     
     // Args
     int msg_len = 1;
+    int pair_num = 0;
     bool is_server = false;
  
     // Check number of arguments 
@@ -46,10 +47,18 @@ int main(int argc, char const *argv[])
         goto cleanup;    
     }
 
-    // Check third argument - the length of the messages to send
+    // Check second argument - the length of the messages to send
     msg_len = atoi(argv[ARG_MSG_LEN]);
     if (msg_len < 1 || msg_len > MAX_MSG_LEN) {
         printf("ERROR: invalid message length. Should be 0 < msg_len <= %d, not %d\n", MAX_MSG_LEN, msg_len);
+        printf("Usage: %s %s\n", argv[0], USAGE_STR);
+        goto cleanup;
+    } 
+
+    // Check third argument - an id unique to this client/server pair
+    pair_num = atoi(argv[ARG_PAIR_NUM]);
+    if (pair_num < 0 || pair_num > MAX_PAIR_NUM) {
+        printf("ERROR: invalid pair number. Should be 0 <= pair_num <= %d, not %d\n", MAX_PAIR_NUM, pair_num);
         printf("Usage: %s %s\n", argv[0], USAGE_STR);
         goto cleanup;
     } 
@@ -64,9 +73,11 @@ int main(int argc, char const *argv[])
     server_addr.sin_family = AF_INET; 
     server_addr.sin_addr.s_addr = inet_addr(LOOPBACK_IP);
     if (is_server) {
-        server_addr.sin_port = htons(LOOPBACK_PORT); 
+        server_addr.sin_port = htons(LOOPBACK_PORT + pair_num * 2); 
+        printf("Server binding to port=%d", LOOPBACK_PORT + pair_num * 2);
     } else {
-        server_addr.sin_port = htons(LOOPBACK_PORT + 1);
+        server_addr.sin_port = htons(LOOPBACK_PORT + pair_num * 2 + 1);
+        printf("Local client port=%d", LOOPBACK_PORT + pair_num * 2 + 1);
     }
 
     if (is_server) {
@@ -104,7 +115,8 @@ int main(int argc, char const *argv[])
         // Set up remote address
         server_addr.sin_family = AF_INET; 
         server_addr.sin_addr.s_addr = inet_addr(LOOPBACK_IP);
-        server_addr.sin_port = htons(LOOPBACK_PORT); 
+        server_addr.sin_port = htons(LOOPBACK_PORT + pair_num * 2);
+        printf("Client connecting on port=%d", LOOPBACK_PORT + pair_num * 2);
 
         // Connect to the server
         if (0 > connect(sock_fd, (struct sockaddr *) &server_addr, sizeof(server_addr))) { 
